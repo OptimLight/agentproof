@@ -169,7 +169,7 @@ async function runCodexAuthDesignReview(designConfig, browserAudit, staticIssues
       detail: `Codex backend returned HTTP ${response.status} for model ${model}.${errorText ? ` ${errorText}` : ''}`,
       suggestion: 'Run `agentproof --design-ai-provider codex-auth --design-ai-list-models`, choose an available model, then rerun. If the session expired, run `codex login`.',
       why: 'Codex auth uses the ChatGPT Codex backend, whose available model list depends on the logged-in account.',
-      evidence: { provider: 'codex-auth', model, reasoning: designConfig.ai.reasoning || undefined, auth: auth.authPath, models: models.slice(0, 12) }
+      evidence: { provider: 'codex-auth', model, reasoning: designConfig.ai.reasoning || undefined, authConfigured: true, models: models.slice(0, 12) }
     })];
   }
 
@@ -178,7 +178,7 @@ async function runCodexAuthDesignReview(designConfig, browserAudit, staticIssues
 
   return [aiReviewIssue(output, severity, 'codex-auth', model, {
     reasoning: designConfig.ai.reasoning || undefined,
-    auth: auth.authPath,
+    authConfigured: true,
     refreshed: auth.refreshed,
     availableModels: models.slice(0, 12)
   })];

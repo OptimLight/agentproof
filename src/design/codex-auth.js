@@ -43,7 +43,7 @@ export async function resolveCodexAuth(env = process.env) {
     return {
       ok: false,
       code: 'codex_auth_missing_access_token',
-      message: `Codex auth exists at ${authPath}, but it has no access token. Run \`codex login\` or open Codex once, then rerun AgentProof.`,
+      message: 'Codex auth exists, but it has no access token. Run `codex login` or open Codex once, then rerun AgentProof.',
       authPath
     };
   }
@@ -56,7 +56,7 @@ export async function resolveCodexAuth(env = process.env) {
     return {
       ok: false,
       code: 'codex_auth_missing_refresh_token',
-      message: `Codex access token is expired and ${authPath} has no refresh token. Run \`codex login\`, then rerun AgentProof.`,
+      message: 'Codex access token is expired and the local auth file has no refresh token. Run `codex login`, then rerun AgentProof.',
       authPath
     };
   }
@@ -194,7 +194,7 @@ function readCodexAuthPayload(authPath) {
     return {
       ok: false,
       code: 'codex_auth_missing',
-      message: `No Codex auth file found at ${authPath}. Run \`codex login\` or open Codex once, then rerun AgentProof.`,
+      message: 'No Codex auth file was found. Run `codex login` or open Codex once, then rerun AgentProof.',
       authPath
     };
   }
@@ -205,7 +205,7 @@ function readCodexAuthPayload(authPath) {
       return {
         ok: false,
         code: 'codex_auth_invalid_shape',
-        message: `Codex auth file at ${authPath} does not contain a tokens object. Run \`codex login\`, then rerun AgentProof.`,
+        message: 'Codex auth file does not contain a tokens object. Run `codex login`, then rerun AgentProof.',
         authPath
       };
     }
@@ -215,7 +215,7 @@ function readCodexAuthPayload(authPath) {
     return {
       ok: false,
       code: 'codex_auth_unreadable',
-      message: `Could not read Codex auth at ${authPath}: ${error.message}`,
+      message: `Could not read Codex auth: ${error.message}`,
       authPath
     };
   }

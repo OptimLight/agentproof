@@ -1,0 +1,142 @@
+{
+  "$schema": "./schemas/agentproof.config.schema.json",
+  "profile": "standard",
+  "failUnder": 80,
+  "maxFiles": 900,
+  "commandTimeoutSeconds": 120,
+  "ignore": [
+    "fixtures",
+    "snapshots",
+    "examples",
+    "docs/launch-kit",
+    "homepage",
+    "AGENT_PROOF_REPORT.md",
+    "agentproof-report.md",
+    "agentproof-report.html",
+    "agentproof-summary.json",
+    "agentproof-receipt.json",
+    "agentproof-pr-comment.md",
+    "agentproof.sarif",
+    "agentproof-badge.svg"
+  ],
+  "slopPhrases": [
+    "coming soon",
+    "premium experience",
+    "lorem ipsum",
+    "trusted by thousands",
+    "world-class"
+  ],
+  "commands": [],
+  "budgets": {
+    "critical": 0,
+    "high": 2,
+    "medium": 10
+  },
+  "severityOverrides": {
+    "hygiene.console-log": "low"
+  },
+  "suppressions": [
+    {
+      "id": "slop.generic-copy",
+      "file": "docs/internal-drafts/*",
+      "reason": "Internal draft copy is allowed before public launch.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "hygiene.console-log",
+      "file": "docs/*",
+      "reason": "Documentation includes terminal and code-output examples for rule education.",
+      "expires": "2026-12-31"
+    },
+    {
+      "category": "security",
+      "file": "docs/*",
+      "reason": "Documentation intentionally includes bad examples so users understand what AgentProof catches.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "docs/*",
+      "reason": "Documentation intentionally names slop phrases and bad examples for rule education.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "README.md",
+      "reason": "README intentionally lists phrases and unfinished markers that AgentProof detects.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "agentproof.config.json",
+      "reason": "The repository policy config intentionally contains the slop phrases it asks AgentProof to catch.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "hygiene.debugger",
+      "file": "agentproof.config.json",
+      "reason": "The self-audit config documents a scanner suppression for this rule name.",
+      "expires": "2026-12-31"
+    },
+    {
+      "category": "security",
+      "file": "src/rules.js",
+      "reason": "Rule catalog intentionally contains unsafe pattern names as documentation, not executable risk.",
+      "expires": "2026-12-31"
+    },
+    {
+      "category": "security",
+      "file": "src/checks.js",
+      "reason": "Static scanner regexes intentionally contain risky pattern names so they can be detected in target projects.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "hygiene.debugger",
+      "file": "src/checks.js",
+      "reason": "The scanner rule source mentions debugger to detect it in audited projects.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "src/*",
+      "reason": "Scanner and report source files intentionally contain the phrases they detect or explain.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "hygiene.console-log",
+      "file": "src/index.js",
+      "reason": "The CLI entrypoint intentionally writes command output to stdout.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "src/constants.js",
+      "reason": "Built-in slop phrase catalog must include the phrases it detects.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "hygiene.console-log",
+      "file": "scripts/validate-release.mjs",
+      "reason": "The release validator intentionally prints PASS/FAIL status lines.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "templates/*",
+      "reason": "Starter templates intentionally include slop phrases so new configs can catch them in target projects.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "src/design/static.js",
+      "reason": "DesignGuard rule source must include generic positioning phrases it detects.",
+      "expires": "2026-12-31"
+    },
+    {
+      "id": "slop.generic-copy",
+      "file": "src/rules.js",
+      "reason": "Rule catalog intentionally includes bad-copy examples for documentation.",
+      "expires": "2026-12-31"
+    }
+  ]
+}

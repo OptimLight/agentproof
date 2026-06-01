@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Good Dashboard Demo</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="dashboard">
+      <header>
+        <p class="eyebrow">Release cockpit</p>
+        <h1>Decide which agent PRs are safe to merge.</h1>
+        <button>Run audit</button>
+      </header>
+      <section class="metrics">
+        <article><span>Ship score</span><strong>94</strong></article>
+        <article><span>High risk</span><strong>0</strong></article>
+        <article><span>Design blockers</span><strong>0</strong></article>
+      </section>
+      <section class="filters">
+        <label>Filter <input placeholder="Search PR, route, rule"></label>
+        <button>Status</button>
+      </section>
+      <table>
+        <thead><tr><th>PR</th><th>Status</th><th>Finding</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>#42</td><td>success</td><td>empty state verified</td><td><button>Open report</button></td></tr>
+        </tbody>
+      </table>
+      <p class="state">Empty, loading, error, disabled, and success states are documented.</p>
+    </main>
+  </body>
+</html>

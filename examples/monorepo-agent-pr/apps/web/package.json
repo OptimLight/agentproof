@@ -1,0 +1,9 @@
+{
+  "name": "@agentproof-demo/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"console.log('web build passed')\"",
+    "lint": "node -e \"console.log('web lint passed')\""
+  }
+}

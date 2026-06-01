@@ -1,0 +1,63 @@
+name: AgentProof PR Comment
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+
+jobs:
+  proof:
+    name: AgentProof QA gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: agentproof
+        name: AgentProof
+        uses: runstudio/agentproof@v1
+        with:
+          path: .
+          profile: strict
+          fail-under: "85"
+          changed: "true"
+          base: origin/main
+          # Enable after your workflow starts the app:
+          # design: saas
+          # design-url: http://localhost:3000
+          # design-viewports: mobile,desktop
+          # design-ai: "false"
+          baseline: .agentproof/baseline.json
+          sarif: agentproof.sarif
+          html: agentproof-report.html
+          pr-comment: agentproof-pr-comment.md
+          receipt: agentproof-receipt.json
+          summary: agentproof-summary.json
+          history: .agentproof/history.jsonl
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: agentproof.sarif
+      - name: Upload AgentProof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentproof-report
+          path: |
+            AGENT_PROOF_REPORT.md
+            agentproof.sarif
+            agentproof-report.html
+            agentproof-pr-comment.md
+            agentproof-receipt.json
+            agentproof-summary.json
+            .agentproof/history.jsonl
+      - name: Post AgentProof PR comment
+        if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: agentproof
+          path: agentproof-pr-comment.md

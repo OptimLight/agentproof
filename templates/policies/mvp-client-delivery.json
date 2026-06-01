@@ -1,0 +1,42 @@
+{
+  "$schema": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+  "profile": "strict",
+  "failUnder": 90,
+  "maxFiles": 1800,
+  "commandTimeoutSeconds": 180,
+  "baseline": ".agentproof/baseline.json",
+  "ignore": ["fixtures", "snapshots", "generated"],
+  "slopPhrases": [
+    "coming soon",
+    "premium experience",
+    "lorem ipsum",
+    "trusted by thousands",
+    "revolutionize the way"
+  ],
+  "commands": [],
+  "design": {
+    "enabled": true,
+    "type": "saas",
+    "url": "",
+    "routes": ["/"],
+    "viewports": ["mobile", "desktop"],
+    "strictness": "strict",
+    "ai": {
+      "enabled": false,
+      "blocking": false
+    }
+  },
+  "budgets": {
+    "critical": 0,
+    "high": 0,
+    "medium": 6,
+    "low": 30
+  },
+  "severityOverrides": {
+    "design.layout.horizontal-overflow": "critical",
+    "design.hero.too-tall": "high",
+    "design.cta.below-fold": "high",
+    "design.color.low-contrast": "high"
+  },
+  "suppressions": []
+}

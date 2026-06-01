@@ -1,0 +1,9 @@
+{
+  "name": "@agentproof-demo/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node -e \"console.error('api contract test failed'); process.exit(1)\"",
+    "build": "node -e \"console.log('api build passed')\""
+  }
+}

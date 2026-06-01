@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+  "profile": "relaxed",
+  "failUnder": 65,
+  "maxFiles": 900,
+  "commandTimeoutSeconds": 90,
+  "ignore": [
+    "fixtures",
+    "snapshots",
+    "generated"
+  ],
+  "commands": [],
+  "budgets": {
+    "critical": 0,
+    "high": 8,
+    "medium": 30
+  },
+  "severityOverrides": {
+    "slop.generic-copy": "low",
+    "hygiene.console-log": "low"
+  },
+  "suppressions": []
+}

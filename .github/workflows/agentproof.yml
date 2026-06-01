@@ -1,0 +1,49 @@
+name: AgentProof
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  proof:
+    name: AgentProof self-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: AgentProof
+        uses: ./
+        with:
+          path: .
+          profile: strict
+          fail-under: "80"
+          changed: "false"
+          no-run-scripts: "true"
+          sarif: agentproof.sarif
+          html: agentproof-report.html
+          pr-comment: agentproof-pr-comment.md
+          receipt: agentproof-receipt.json
+          summary: agentproof-summary.json
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: agentproof.sarif
+      - name: Upload AgentProof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentproof-self-check
+          path: |
+            AGENT_PROOF_REPORT.md
+            agentproof.sarif
+            agentproof-report.html
+            agentproof-pr-comment.md
+            agentproof-receipt.json
+            agentproof-summary.json

@@ -1,0 +1,60 @@
+- name: bug
+  color: d73a4a
+  description: Something documented is broken, crashes, or behaves incorrectly.
+
+- name: rule request
+  color: 5319e7
+  description: Proposal for a new AgentProof check.
+
+- name: false positive
+  color: fbca04
+  description: A finding may be too noisy, unfair, or incorrectly scoped.
+
+- name: docs
+  color: 0075ca
+  description: README, guides, examples, onboarding, or launch documentation.
+
+- name: github-action
+  color: 0e8a16
+  description: GitHub Action inputs, outputs, annotations, workflows, or artifacts.
+
+- name: claim-audit
+  color: 1d76db
+  description: Final claim wording, evidence matching, or claim templates.
+
+- name: security
+  color: ee0701
+  description: Secrets, command execution, supply chain, or sensitive artifact handling.
+
+- name: adoption
+  color: c5def5
+  description: Rollout, observe-only, baselines, policy packs, or team onboarding.
+
+- name: monorepo
+  color: bfdadc
+  description: Workspace, package detection, changed packages, or package-level evidence.
+
+- name: needs reproduction
+  color: fef2c0
+  description: Needs a minimal example, sanitized output, or clearer steps.
+
+- name: good first issue
+  color: 7057ff
+  description: Safe and well-scoped for a first contribution.
+
+- name: help wanted
+  color: 008672
+  description: Maintainers welcome community help.
+
+- name: blocked
+  color: b60205
+  description: Waiting on external context, reproduction, or maintainer decision.
+
+- name: release
+  color: 0052cc
+  description: Release packaging, validation, changelog, or GitHub/npm launch work.
+
+- name: launch-kit
+  color: f9d0c4
+  description: Social posts, demo video, positioning, repo profile, or launch assets.
+

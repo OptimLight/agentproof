@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+  "profile": "strict",
+  "failUnder": 85,
+  "maxFiles": 1200,
+  "commandTimeoutSeconds": 120,
+  "ignore": [
+    "fixtures",
+    "snapshots",
+    "generated"
+  ],
+  "packages": [],
+  "slopPhrases": [
+    "coming soon",
+    "premium experience",
+    "lorem ipsum",
+    "trusted by thousands"
+  ],
+  "commands": [],
+  "budgets": {
+    "critical": 0,
+    "high": 1,
+    "medium": 8
+  },
+  "severityOverrides": {
+    "hygiene.console-log": "low"
+  },
+  "suppressions": [
+    {
+      "id": "slop.generic-copy",
+      "file": "docs/internal-drafts/*",
+      "reason": "Internal draft copy is allowed before public launch.",
+      "expires": "2026-12-31"
+    }
+  ]
+}

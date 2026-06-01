@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+  "profile": "standard",
+  "failUnder": 80,
+  "maxFiles": 1500,
+  "commandTimeoutSeconds": 180,
+  "baseline": ".agentproof/baseline.json",
+  "ignore": [
+    "fixtures",
+    "snapshots",
+    "generated",
+    "vendor"
+  ],
+  "commands": [],
+  "budgets": {
+    "critical": 0,
+    "high": 2,
+    "medium": 12,
+    "low": 50
+  },
+  "severityOverrides": {},
+  "suppressions": [
+    {
+      "id": "slop.generic-copy",
+      "file": "docs/internal-drafts/*",
+      "reason": "Internal drafts are allowed while legacy docs are cleaned up.",
+      "expires": "2026-12-31"
+    }
+  ]
+}

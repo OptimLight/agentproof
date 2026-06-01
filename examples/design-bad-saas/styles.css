@@ -1,0 +1,29 @@
+:root {
+  --background: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #bdbdbd;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hero {
+  min-height: 112vh;
+  width: 128vw;
+  padding: 73px 19px 141px 57px;
+  background: #ffffff;
+  color: #bdbdbd;
+}
+
+h1 {
+  font-size: 72px;
+  line-height: 0.92;
+}
+
+a {
+  display: inline-flex;
+  height: 32px;
+  padding: 4px 8px;
+}

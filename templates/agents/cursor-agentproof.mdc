@@ -1,0 +1,19 @@
+---
+description: Require AgentProof evidence before AI-assisted completion claims.
+alwaysApply: true
+---
+
+# AgentProof rule
+
+Before you claim a coding task is complete:
+
+1. Write the intended final answer to `.agentproof/final-claim.md`.
+2. Run:
+
+```bash
+npx agentproof --path . --profile strict --claim .agentproof/final-claim.md --receipt agentproof-receipt.json
+```
+
+3. If AgentProof reports `DO NOT SHIP` or `FIX BEFORE MERGE`, fix the blockers or explicitly ask the user to accept the risk.
+4. Do not claim tests, build, lint, typecheck, deployment, or production readiness unless those signals were observed.
+5. Final answer must include verdict, score, receipt path, verification scope, and remaining risks.

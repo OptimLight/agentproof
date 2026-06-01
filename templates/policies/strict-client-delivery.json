@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+  "profile": "strict",
+  "failUnder": 90,
+  "maxFiles": 1500,
+  "commandTimeoutSeconds": 180,
+  "baseline": ".agentproof/baseline.json",
+  "ignore": [
+    "fixtures",
+    "snapshots",
+    "generated"
+  ],
+  "commands": [],
+  "budgets": {
+    "critical": 0,
+    "high": 0,
+    "medium": 6,
+    "low": 30
+  },
+  "severityOverrides": {},
+  "suppressions": []
+}

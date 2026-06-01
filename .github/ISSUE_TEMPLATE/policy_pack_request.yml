@@ -1,0 +1,38 @@
+name: Policy pack request
+description: Suggest a new starter policy pack or changes to an existing one.
+title: "policy-pack: "
+labels: [policy-pack]
+body:
+  - type: dropdown
+    id: pack-type
+    attributes:
+      label: What kind of policy pack is this?
+      options:
+        - New policy pack
+        - Change existing pack
+        - Threshold tuning
+        - Suppression/baseline workflow
+    validations:
+      required: true
+  - type: input
+    id: audience
+    attributes:
+      label: Target team or repo type
+      placeholder: Open source library maintainers, fintech apps, hackathon prototypes...
+    validations:
+      required: true
+  - type: textarea
+    id: posture
+    attributes:
+      label: Desired posture
+      description: What should block, warn, or be tolerated?
+      placeholder: Critical security issues should block, placeholder copy can warn...
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example repo workflow
+      description: Describe how this team would adopt AgentProof.
+    validations:
+      required: false

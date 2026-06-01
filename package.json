@@ -1,0 +1,94 @@
+{
+  "name": "agentproof",
+  "version": "0.1.0",
+  "description": "Local QA gate for AI-generated code: tests, build, security, UI slop, docs drift, claim audit, receipts, and PR risk scoring.",
+  "type": "module",
+  "bin": {
+    "agentproof": "./bin/agentproof.mjs"
+  },
+  "scripts": {
+    "start": "node ./bin/agentproof.mjs",
+    "demo": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --no-run-scripts --fail-under 80 --history .agentproof/history.jsonl",
+    "demo:json": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --no-run-scripts --json",
+    "demo:sarif": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --no-run-scripts --sarif agentproof.sarif --badge agentproof-badge.svg --pr-comment agentproof-pr-comment.md --receipt agentproof-receipt.json --summary agentproof-summary.json",
+    "demo:claim": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --profile strict --no-run-scripts --claim ../agent-claim.md --html agentproof-report.html --fail-under 80",
+    "demo:good": "node ./bin/agentproof.mjs --path examples/good-agent-pr --no-run-scripts --claim ../good-agent-claim.md --html good-agentproof-report.html --receipt good-agentproof-receipt.json",
+    "demo:design": "node ./bin/agentproof.mjs --path examples/design-bad-saas --design saas --profile strict --no-run-scripts --fail-under 85",
+    "demo:design:good": "node ./bin/agentproof.mjs --path examples/design-good-saas --design saas --profile strict --no-run-scripts --fail-under 85",
+    "demo:design-fix": "node ./bin/agentproof.mjs design-fix --path examples/design-bad-saas --design saas --design-ai-provider codex-auth",
+    "demo:design-improve": "node ./bin/agentproof.mjs design-improve --path examples/design-bad-saas --design saas --design-ai-provider codex-auth --target-score 90",
+    "demo:design-clone": "node ./bin/agentproof.mjs design-fix --path . --from-browser --design landing --design-url https://example.com --clone-output /tmp/agentproof-design-clone --design-ai-provider codex-auth",
+    "demo:monorepo": "node ./bin/agentproof.mjs --path examples/monorepo-agent-pr --profile strict --claim agent-claim.md --html monorepo-agentproof-report.html --receipt monorepo-agentproof-receipt.json --summary monorepo-agentproof-summary.json --fail-under 85",
+    "demo:observe": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --profile strict --no-run-scripts --claim ../agent-claim.md --observe-only",
+    "demo:annotations": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --profile strict --no-run-scripts --claim ../agent-claim.md --github-annotations --observe-only",
+    "demo:baseline": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --profile strict --no-run-scripts --update-baseline .agentproof/baseline.json",
+    "doctor": "node ./bin/agentproof.mjs --doctor --path .",
+    "trend": "node ./bin/agentproof.mjs --path examples/bad-agent-pr --trend .agentproof/history.jsonl",
+    "rules": "node ./bin/agentproof.mjs --rules markdown",
+    "rules:json": "node ./bin/agentproof.mjs --rules json",
+    "explain": "node ./bin/agentproof.mjs --explain security.secret-pattern",
+    "verify-receipt": "node ./bin/agentproof.mjs --verify-receipt agentproof-receipt.json",
+    "policy-packs": "node ./bin/agentproof.mjs --policy-packs",
+    "recipes": "node ./bin/agentproof.mjs --recipes",
+    "troubleshoot": "node ./bin/agentproof.mjs --troubleshoot",
+    "faq": "node ./bin/agentproof.mjs --faq",
+    "claim-template": "node ./bin/agentproof.mjs --claim-template",
+    "pack:dry-run": "npm pack --dry-run",
+    "validate:release": "node ./scripts/validate-release.mjs",
+    "self-check": "node ./bin/agentproof.mjs --path . --profile strict --no-run-scripts"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.53.0"
+  },
+  "keywords": [
+    "ai-agents",
+    "codex",
+    "claude-code",
+    "cursor",
+    "github-actions",
+    "qa",
+    "code-review",
+    "anti-slop",
+    "developer-tools",
+    "sarif",
+    "ci",
+    "static-analysis",
+    "agentic-coding"
+  ],
+  "homepage": "https://github.com/runstudio/agentproof#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runstudio/agentproof.git"
+  },
+  "bugs": {
+    "url": "https://github.com/runstudio/agentproof/issues"
+  },
+  "author": "Run Studio contributors",
+  "license": "MIT",
+  "files": [
+    "bin",
+    "src",
+    "scripts",
+    "examples",
+    "templates",
+    "skills",
+    "docs",
+    "assets",
+    "schemas",
+    "homepage",
+    "action.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "GOVERNANCE.md",
+    "LIMITATIONS.md",
+    "PRIVACY.md",
+    "SUPPORT.md",
+    "SECURITY.md",
+    "LICENSE"
+  ]
+}

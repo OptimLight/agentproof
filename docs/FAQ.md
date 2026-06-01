@@ -1,0 +1,99 @@
+# FAQ
+
+## What is AgentProof?
+
+AgentProof is a local QA gate for AI-generated pull requests. It checks code, verification evidence, risk signals, artifacts, and the agent final claim before a maintainer merges.
+
+## Is AgentProof another coding agent?
+
+No. AgentProof does not write code for you. It reviews the evidence around code produced by humans or agents.
+
+## What is the unique idea?
+
+Most tools inspect code. AgentProof also audits what the agent says at the end. If the agent claims "tests passed" but AgentProof did not observe passing test evidence, the claim is flagged.
+
+## Does AgentProof prove my software is safe?
+
+No. It gives maintainers a local, reviewable signal. It does not replace tests, code review, SAST, secret scanning, accessibility checks, or human judgment.
+
+See `LIMITATIONS.md` for the full scope boundary.
+
+## Why not just use tests and linters?
+
+Use them. AgentProof collects that evidence, adds agent-specific risk checks, and turns the result into reports, receipts, annotations, PR comments, and policy decisions.
+
+## Can I run it without executing project scripts?
+
+Yes:
+
+```bash
+npx agentproof --path . --no-run-scripts
+```
+
+Use this for first scans, unknown repositories, and untrusted dependency scripts.
+
+## Can I adopt it without blocking pull requests?
+
+Yes. Use observe-only mode:
+
+```bash
+npx agentproof --path . --profile strict --fail-under 85 --observe-only
+```
+
+This preserves the verdict and artifacts, but exits `0`.
+
+## What does AgentProof send to a server?
+
+Nothing by default. AgentProof is designed as a local CLI. Be careful with artifacts because reports and receipts may include filenames, command output, and sanitized findings.
+
+See `PRIVACY.md` for the full local data-handling policy.
+
+## Does it work with monorepos?
+
+AgentProof includes first-pass JavaScript workspace support through root workspaces and configured packages. Monorepo behavior should be verified against your repo before enforcing a strict gate.
+
+## What happens when it fails?
+
+Open `AGENT_PROOF_REPORT.md`, classify findings as real risk, known debt, or false positives, then fix, baseline, or suppress with an expiry date.
+
+For help:
+
+```bash
+npx agentproof --troubleshoot
+```
+
+## How should agents write final claims?
+
+Good claims are scoped to evidence:
+
+```text
+Implemented the requested change. Build and lint passed. I did not run the full test suite.
+```
+
+Avoid unsupported certainty:
+
+```text
+Done. Everything is tested and production-ready.
+```
+
+## How do I install it in a repo?
+
+Run:
+
+```bash
+npx agentproof --init --all
+```
+
+That creates config, CI workflow, an agent contract, and supported agent instruction templates.
+
+## Who is this for?
+
+AgentProof is for maintainers, solo founders, agencies, platform teams, and security-minded developers who let AI coding agents modify real repositories.
+
+## What should I try first?
+
+Use the command menu:
+
+```bash
+npx agentproof --recipes
+```

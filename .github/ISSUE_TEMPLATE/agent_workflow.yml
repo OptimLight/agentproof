@@ -1,0 +1,27 @@
+name: Agent workflow integration
+description: Suggest or report an integration with Codex, Claude Code, Cursor, Copilot, OpenCode, or internal agents.
+title: "agent-workflow: "
+labels: [agent workflow]
+body:
+  - type: input
+    id: agent
+    attributes:
+      label: Agent or tool
+      placeholder: Codex, Claude Code, Cursor, Copilot, OpenCode, internal harness...
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow
+      description: How should AgentProof fit before the agent claims completion?
+      placeholder: The agent should draft final-claim.md, run AgentProof, then include the receipt path...
+    validations:
+      required: true
+  - type: textarea
+    id: friction
+    attributes:
+      label: Current friction
+      description: What is annoying, missing, or hard to automate today?
+    validations:
+      required: false

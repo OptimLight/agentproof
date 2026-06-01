@@ -1,0 +1,9 @@
+{
+  "name": "monorepo-agent-pr",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

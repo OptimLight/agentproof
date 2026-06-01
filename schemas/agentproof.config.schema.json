@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+  "title": "AgentProof configuration",
+  "description": "Configuration for AgentProof, the local QA gate for AI-generated code and agent PRs.",
+  "type": "object",
+  "additionalProperties": false,
+  "examples": [
+    {
+      "$schema": "https://raw.githubusercontent.com/runstudio/agentproof/main/schemas/agentproof.config.schema.json",
+      "profile": "strict",
+      "failUnder": 90,
+      "baseline": ".agentproof/baseline.json",
+      "budgets": {
+        "critical": 0,
+        "high": 0,
+        "medium": 6
+      }
+    }
+  ],
+  "$defs": {
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"]
+    },
+    "pathPattern": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Relative path, path fragment, or wildcard-style pattern."
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URL for editor autocomplete."
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["relaxed", "standard", "strict"],
+      "default": "standard",
+      "description": "Risk profile used to derive default thresholds and severity budgets."
+    },
+    "design": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "DesignGuard configuration for rendered UI and product-design readiness checks.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable DesignGuard without passing --design."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["landing", "saas", "dashboard", "marketplace", "ecommerce", "webapp", "mobile-app"],
+          "default": "webapp",
+          "description": "Product type used to select contextual design rules."
+        },
+        "url": {
+          "type": "string",
+          "description": "Local or CI URL to render for DOM/CSS/screenshot proof."
+        },
+        "locale": {
+          "type": "string",
+          "description": "Browser locale and Accept-Language used for rendered audits and browser-clone capture, for example fr-FR."
+        },
+        "routes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "default": ["/"],
+          "uniqueItems": true,
+          "description": "Routes audited when url is provided."
+        },
+        "viewports": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["mobile", "tablet", "desktop"]
+          },
+          "default": ["mobile", "desktop"],
+          "uniqueItems": true,
+          "description": "Viewport set used for rendered design checks."
+        },
+        "strictness": {
+          "type": "string",
+          "enum": ["relaxed", "standard", "strict"],
+          "default": "standard",
+          "description": "DesignGuard strictness. Defaults to the AgentProof profile when omitted."
+        },
+        "failUnder": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "DesignGuard score threshold. Defaults are relaxed 70, standard 80, strict 85."
+        },
+        "ai": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional AI design-review layer. Local deterministic checks remain the source of truth.",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "blocking": {
+              "type": "boolean",
+              "default": false,
+              "description": "When true, AI reviewer findings can be medium severity instead of informational."
+            },
+            "provider": {
+              "type": "string",
+              "enum": ["openai-api", "codex-auth", "auto"],
+              "default": "openai-api",
+              "description": "AI provider for DesignGuard. openai-api uses OPENAI_API_KEY; codex-auth uses the local Codex login at CODEX_HOME or ~/.codex/auth.json."
+            },
+            "model": {
+              "type": "string",
+              "description": "AI model used by --design-ai, DesignFix, and DesignImprove. For codex-auth, use a Codex backend model such as gpt-5.5 or gpt-5.3-codex-spark when available."
+            },
+            "reasoning": {
+              "type": "string",
+              "enum": ["minimal", "low", "medium", "high", "xhigh"],
+              "description": "Optional reasoning effort for supported AI models, for example xhigh with gpt-5.5."
+            }
+          }
+        }
+      }
+    },
+    "failUnder": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Score threshold below which AgentProof exits non-zero. Overrides profile default when set."
+    },
+    "baseline": {
+      "$ref": "#/$defs/pathPattern",
+      "description": "Path to a baseline file. Known findings in the baseline are excluded from the active score."
+    },
+    "history": {
+      "$ref": "#/$defs/pathPattern",
+      "description": "Suggested JSONL history path for CI or local scripts. CLI --history controls writes."
+    },
+    "maxFiles": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 900,
+      "description": "Maximum number of text files scanned by static checks."
+    },
+    "commandTimeoutSeconds": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 120,
+      "description": "Timeout per verification command."
+    },
+    "ignore": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pathPattern" },
+      "default": [],
+      "uniqueItems": true,
+      "description": "Path fragments or names ignored by file scanning. AgentProof also applies its built-in ignores."
+    },
+    "slopPhrases": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "default": [],
+      "uniqueItems": true,
+      "description": "Additional phrases treated as generic or unfinished AI output. Built-in phrases still apply."
+    },
+    "packages": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pathPattern" },
+      "default": [],
+      "uniqueItems": true,
+      "description": "Monorepo package directories or simple workspace patterns such as packages/* and apps/*."
+    },
+    "commands": {
+      "type": "array",
+      "description": "Custom verification commands run before auto-detected commands.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_.-]+$",
+            "description": "Stable command id fragment used in findings."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable command label shown in reports."
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Shell command run from the project root."
+          },
+          "severity": {
+            "$ref": "#/$defs/severity",
+            "description": "Finding severity if the command fails."
+          },
+          "language": {
+            "type": "string",
+            "description": "Optional stack metadata, for example javascript, python, go, rust, custom."
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, command failures are reported as informational instead of blocking."
+          }
+        }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Maximum active findings allowed by severity before AgentProof creates a policy finding.",
+      "properties": {
+        "critical": { "type": "integer", "minimum": 0 },
+        "high": { "type": "integer", "minimum": 0 },
+        "medium": { "type": "integer", "minimum": 0 },
+        "low": { "type": "integer", "minimum": 0 },
+        "info": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "severityOverrides": {
+      "type": "object",
+      "description": "Map rule ids to overridden severities.",
+      "additionalProperties": { "$ref": "#/$defs/severity" },
+      "examples": [
+        {
+          "hygiene.console-log": "low",
+          "security.unsafe-html": "high"
+        }
+      ]
+    },
+    "suppressions": {
+      "type": "array",
+      "description": "Documented suppressions for known false positives. Prefer narrow, temporary suppressions.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "anyOf": [
+          { "required": ["id"] },
+          { "required": ["category"] },
+          { "required": ["file"] }
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Rule id or wildcard pattern, for example slop.*."
+          },
+          "category": {
+            "type": "string",
+            "description": "Finding category, for example security, ui, slop, claims, policy."
+          },
+          "file": {
+            "$ref": "#/$defs/pathPattern",
+            "description": "File path or wildcard pattern."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Human-readable reason shown in reports."
+          },
+          "expires": {
+            "type": "string",
+            "format": "date",
+            "description": "Date after which the suppression no longer applies."
+          }
+        }
+      }
+    }
+  }
+}

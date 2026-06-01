@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgentProof - The QA gate for AI-generated PRs</title>
+  <meta name="description" content="Your AI agent says it is done. AgentProof tells you if it is shippable.">
+  <meta property="og:title" content="AgentProof - QA gate for AI-generated PRs">
+  <meta property="og:description" content="Turn agent confidence into reviewable proof: claim audit, receipts, SARIF, policy packs, and GitHub Actions.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #05070d;
+      --paper-2: #0a0f18;
+      --ink: #f8fafc;
+      --muted: #9aa8bd;
+      --soft: #dbeafe;
+      --line: rgba(148, 163, 184, 0.2);
+      --panel: rgba(15, 23, 42, 0.68);
+      --panel-strong: rgba(15, 23, 42, 0.92);
+      --green: #39ff88;
+      --teal: #2dd4bf;
+      --blue: #60a5fa;
+      --amber: #f59e0b;
+      --red: #fb7185;
+      --radius: 26px;
+      --shadow: 0 30px 120px rgba(0, 0, 0, 0.52);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(57, 255, 136, 0.2), transparent 28rem),
+        radial-gradient(circle at 86% 8%, rgba(96, 165, 250, 0.22), transparent 30rem),
+        radial-gradient(circle at 52% 58%, rgba(45, 212, 191, 0.12), transparent 36rem),
+        linear-gradient(135deg, var(--paper) 0%, #0d1320 52%, #030407 100%);
+      font-family: "Space Grotesk", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 76%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(5, 7, 13, 0.9));
+      z-index: -1;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 28px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: "Azeret Mono", monospace;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+    }
+
+    .mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      border: 1px solid rgba(57, 255, 136, 0.32);
+      background: linear-gradient(145deg, rgba(57, 255, 136, 0.22), rgba(96, 165, 250, 0.1));
+      box-shadow: inset 0 0 34px rgba(57, 255, 136, 0.16), 0 16px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.045);
+      text-decoration: none;
+      font-family: "Azeret Mono", monospace;
+      font-size: 12px;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .pill:hover, .button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(248, 250, 252, 0.44);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .button.primary {
+      color: #06100b;
+      border-color: transparent;
+      background: linear-gradient(135deg, #f8fafc, #b7f7d0);
+      font-weight: 800;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 36px;
+      align-items: center;
+      padding: 72px 0 38px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      color: #b7f7d0;
+      border: 1px solid rgba(57, 255, 136, 0.28);
+      background: rgba(57, 255, 136, 0.08);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-family: "Azeret Mono", monospace;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(57, 255, 136, 0.72);
+      animation: pulse 1.8s infinite;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(50px, 8.5vw, 118px);
+      line-height: 0.86;
+      letter-spacing: -0.09em;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: transparent;
+      background: linear-gradient(100deg, #f8fafc 10%, #b7f7d0 48%, #93c5fd 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .lead {
+      max-width: 670px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.48;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .mini-proof {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 28px;
+      max-width: 650px;
+    }
+
+    .mini-proof div {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px;
+      background: rgba(15, 23, 42, 0.58);
+    }
+
+    .mini-proof strong {
+      display: block;
+      font-family: "Azeret Mono", monospace;
+      font-size: 12px;
+      color: var(--soft);
+      margin-bottom: 6px;
+    }
+
+    .mini-proof p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .terminal {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel-strong), rgba(2, 6, 23, 0.9));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform: rotate(1deg);
+      animation: floatIn 700ms ease both;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      font-family: "Azeret Mono", monospace;
+      font-size: 12px;
+    }
+
+    .lights { display: flex; gap: 7px; }
+    .lights span { display: block; width: 10px; height: 10px; border-radius: 50%; }
+    .lights span:nth-child(1) { background: var(--red); }
+    .lights span:nth-child(2) { background: var(--amber); }
+    .lights span:nth-child(3) { background: var(--green); }
+
+    pre {
+      margin: 0;
+      padding: 24px;
+      white-space: pre-wrap;
+      color: #dbeafe;
+      font-family: "Azeret Mono", monospace;
+      font-size: clamp(12px, 1.3vw, 14px);
+      line-height: 1.72;
+    }
+
+    .fail { color: #fecdd3; }
+    .warn { color: #fde68a; }
+    .ok { color: #bbf7d0; }
+    .dim { color: #8ea0b8; }
+    .cyan { color: #99f6e4; }
+
+    section { padding: 48px 0; }
+
+    .section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(32px, 5vw, 66px);
+      line-height: 0.94;
+      letter-spacing: -0.07em;
+    }
+
+    .section-title p {
+      max-width: 430px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      font-family: "Azeret Mono", monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      color: var(--soft);
+    }
+
+    .badge.danger { color: #fecdd3; border-color: rgba(251, 113, 133, 0.34); }
+    .badge.safe { color: #bbf7d0; border-color: rgba(57, 255, 136, 0.34); }
+
+    .panel-body { padding: 20px; }
+
+    .claim {
+      margin: 0 0 16px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(2, 6, 23, 0.44);
+      color: var(--soft);
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .checks {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .checks li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 11px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .card {
+      min-height: 182px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .install {
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 22px;
+    }
+
+    .install-copy {
+      padding: 26px;
+    }
+
+    .install-copy p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 12px 0 0;
+    }
+
+    .copybox {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+      background: rgba(2, 6, 23, 0.48);
+    }
+
+    .command {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      overflow-x: auto;
+      font-family: "Azeret Mono", monospace;
+      font-size: 13px;
+      color: #dbeafe;
+    }
+
+    .command span {
+      color: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .docs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    footer {
+      padding: 44px 0 58px;
+      color: var(--muted);
+      font-family: "Azeret Mono", monospace;
+      font-size: 12px;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(57, 255, 136, 0.62); }
+      70% { box-shadow: 0 0 0 10px rgba(57, 255, 136, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(57, 255, 136, 0); }
+    }
+
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(20px) rotate(1deg); }
+      to { opacity: 1; transform: translateY(0) rotate(1deg); }
+    }
+
+    @media (max-width: 920px) {
+      nav { align-items: flex-start; flex-direction: column; }
+      .hero, .comparison, .install { grid-template-columns: 1fr; }
+      .terminal { transform: none; }
+      .grid, .mini-proof { grid-template-columns: 1fr 1fr; }
+      .section-title { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 24px, 1180px); }
+      .hero { padding-top: 34px; }
+      .grid, .mini-proof { grid-template-columns: 1fr; }
+      .nav-links { width: 100%; justify-content: flex-start; }
+      .pill, .button { width: auto; }
+      pre { padding: 18px; }
+      .panel-body, .install-copy, .copybox { padding: 16px; }
+      h1 { font-size: clamp(48px, 18vw, 74px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="AgentProof home">
+        <span class="mark" aria-hidden="true">AP</span>
+        <span>AgentProof</span>
+      </a>
+      <div class="nav-links">
+        <a class="pill" href="#demo">Demo</a>
+        <a class="pill" href="#checks">Checks</a>
+        <a class="pill" href="#install">Install</a>
+        <a class="pill" href="../README.md">GitHub</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <div class="eyebrow"><span class="pulse" aria-hidden="true"></span> QA gate for AI-generated PRs</div>
+          <h1 id="hero-title">Your agent says done. <span>Make it prove it.</span></h1>
+          <p class="lead">AgentProof checks code, evidence, risk, and the agent's final claim before you merge. It turns confident AI summaries into reviewable proof.</p>
+          <div class="cta-row">
+            <a class="button primary" href="#install">Start in 30 seconds</a>
+            <a class="button" href="#demo">See before / after</a>
+          </div>
+          <div class="mini-proof" aria-label="AgentProof core outputs">
+            <div><strong>SARIF</strong><p>GitHub Code Scanning annotations for risky PRs.</p></div>
+            <div><strong>Receipt</strong><p>Portable evidence for human review.</p></div>
+            <div><strong>Claim audit</strong><p>Stops agents from overclaiming tests or readiness.</p></div>
+          </div>
+        </div>
+
+        <aside class="terminal" aria-label="AgentProof terminal output">
+          <div class="terminal-bar">
+            <span>agentproof --claim final-message.md</span>
+            <div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+          <pre><span class="fail">FAIL AgentProof 12/100 - DO NOT SHIP</span>
+<span class="dim">Report:</span> AGENT_PROOF_REPORT.md
+<span class="dim">HTML:</span> agentproof-report.html
+
+<span class="warn">Findings: 16</span>
+  <span class="fail">critical</span> claims.done-conflicts-with-findings
+  <span class="fail">high</span> security.secret-pattern
+  <span class="fail">high</span> security.unsafe-html
+  <span class="warn">medium</span> ui.missing-alt-text
+  <span class="warn">medium</span> hygiene.empty-button
+
+<span class="cyan">Agent said:</span> tests passed, ready to ship
+<span class="ok">AgentProof asked:</span> where is the evidence?</pre>
+        </aside>
+      </section>
+
+      <section id="demo" aria-labelledby="demo-title">
+        <div class="section-title">
+          <h2 id="demo-title">The demo is brutally simple.</h2>
+          <p>Bad agent: overconfident claim, risky code still present. Good agent: risk removed, receipt generated, final claim scoped to evidence.</p>
+        </div>
+
+        <div class="comparison">
+          <article class="panel">
+            <div class="panel-head"><span>Before</span><span class="badge danger">DO NOT SHIP</span></div>
+            <div class="panel-body">
+              <p class="claim">"Tests passed, build passed, lint is clean, and this is ready to ship."</p>
+              <ul class="checks">
+                <li><span class="fail">x</span><span>Token-shaped secret left in source.</span></li>
+                <li><span class="fail">x</span><span>Debug logging exposes the suspicious value.</span></li>
+                <li><span class="fail">x</span><span>Unsafe HTML reads from `window.location.hash`.</span></li>
+                <li><span class="fail">x</span><span>Missing alt text, empty button, placeholder copy.</span></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head"><span>After</span><span class="badge safe">EVIDENCE FIRST</span></div>
+            <div class="panel-body">
+              <p class="claim">"Here is what changed, here is what is proven, and here is what I am not claiming."</p>
+              <ul class="checks">
+                <li><span class="ok">✓</span><span>Risky credential-shaped value removed.</span></li>
+                <li><span class="ok">✓</span><span>Unsafe HTML and debug logging removed.</span></li>
+                <li><span class="ok">✓</span><span>Accessible image alt and real button label added.</span></li>
+                <li><span class="ok">✓</span><span>Agent claim no longer floats above evidence.</span></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="checks" aria-labelledby="checks-title">
+        <div class="section-title">
+          <h2 id="checks-title">One gate. Many signals.</h2>
+          <p>AgentProof does not replace tests, linters, scanners, or review. It connects them around one question: can this AI-generated PR be trusted enough to merge?</p>
+        </div>
+
+        <div class="grid">
+          <article class="card"><strong>Verification scripts</strong><p>Runs available test, build, lint, typecheck, Python, Go, Rust, and custom commands when configured.</p></article>
+          <article class="card"><strong>Security smells</strong><p>Flags committed env files, token-shaped secrets, hardcoded credentials, eval, and unsafe HTML surfaces.</p></article>
+          <article class="card"><strong>AI slop</strong><p>Catches lorem ipsum, coming soon copy, vague promises, fake testimonials, TODOs, and unfinished docs.</p></article>
+          <article class="card"><strong>UI hygiene</strong><p>Finds missing alt text, empty buttons, dead hash links, and weak accessibility basics.</p></article>
+          <article class="card"><strong>Claim audit</strong><p>Compares the final agent message against observed evidence so "tests passed" cannot be decorative.</p></article>
+          <article class="card"><strong>Policy packs</strong><p>Start relaxed for prototypes, strict for client delivery, or security-sensitive for auth and billing changes.</p></article>
+          <article class="card"><strong>Receipts</strong><p>Writes portable JSON evidence that reviewers can inspect or verify later.</p></article>
+          <article class="card"><strong>GitHub native</strong><p>Outputs SARIF, badges, PR comments, HTML reports, and a reusable `runstudio/agentproof@v1` action.</p></article>
+        </div>
+      </section>
+
+      <section id="install" aria-labelledby="install-title">
+        <div class="section-title">
+          <h2 id="install-title">From zero to AI PR trust gate.</h2>
+          <p>Use it locally with `npx`, or install the full workflow with policy, CI, and an agent contract.</p>
+        </div>
+
+        <div class="install panel">
+          <div class="install-copy">
+            <h3>Copy, run, merge with less anxiety.</h3>
+            <p>AgentProof is designed for maintainers who already use coding agents but want a simple, boringly useful merge gate.</p>
+            <div class="docs">
+              <a class="pill" href="../docs/BEFORE_AFTER.md">Before / after demo</a>
+              <a class="pill" href="../docs/GITHUB_ACTION.md">GitHub Action</a>
+              <a class="pill" href="../docs/POLICY_PACKS.md">Policy packs</a>
+            </div>
+          </div>
+          <div class="copybox" aria-label="AgentProof install commands">
+            <div class="command"><span>$</span> npx agentproof --path . --fail-under 80</div>
+            <div class="command"><span>$</span> npx agentproof --changed --base origin/main --profile strict</div>
+            <div class="command"><span>$</span> npx agentproof --path . --claim .agentproof/final-claim.md</div>
+            <div class="command"><span>$</span> npx agentproof --init --all</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      AgentProof by Run Studio. Built for the era where agents write code and humans still own the merge button.
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+name: Bug report
+description: Report a crash, wrong verdict, bad artifact, or confusing AgentProof behavior.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make AgentProof harder to fool and easier to trust.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us what AgentProof did and what you expected instead.
+      placeholder: AgentProof reported DO NOT SHIP even though...
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command used
+      render: bash
+      placeholder: npx agentproof --path . --profile strict
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant output
+      description: Paste the smallest useful output, not the whole report if it is huge.
+      render: text
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: AgentProof version
+      placeholder: 0.1.0
+    validations:
+      required: false
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where did it run?
+      options:
+        - Local terminal
+        - GitHub Actions
+        - Other CI
+        - Agent harness
+    validations:
+      required: true

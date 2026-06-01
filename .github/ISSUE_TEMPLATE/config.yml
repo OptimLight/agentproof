@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Before / after demo
+    url: https://github.com/runstudio/agentproof/blob/main/docs/BEFORE_AFTER.md
+    about: See the canonical AgentProof demo before opening an issue.
+  - name: GitHub Action integration
+    url: https://github.com/runstudio/agentproof/blob/main/docs/GITHUB_ACTION.md
+    about: Check the reusable action guide for CI setup questions.

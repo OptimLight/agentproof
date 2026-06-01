@@ -1,0 +1,82 @@
+:root {
+  --primary: #1d4ed8;
+  --background: #eef3fb;
+  --surface: #ffffff;
+  --text: #102033;
+  --muted: #526074;
+  --border: #c9d5e7;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Aptos", "Segoe UI", sans-serif;
+}
+
+.dashboard {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--space-8);
+}
+
+header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+h1 {
+  max-width: 620px;
+  margin: 0;
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1;
+}
+
+button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--primary);
+  color: white;
+  padding: 0 var(--space-4);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin: var(--space-8) 0;
+}
+
+article,
+.filters,
+table {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  padding: var(--space-4);
+}
+
+strong {
+  display: block;
+  font-size: 32px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: var(--space-4);
+}
+
+th,
+td {
+  padding: var(--space-3);
+  text-align: left;
+}

@@ -1,0 +1,267 @@
+name: AgentProof
+description: Local QA gate for AI-generated code and agent PRs.
+branding:
+  icon: shield
+  color: gray-dark
+inputs:
+  path:
+    description: Project path to audit.
+    required: false
+    default: .
+  fail-under:
+    description: Minimum score required to pass.
+    required: false
+    default: "80"
+  observe-only:
+    description: Keep reports and verdicts, but do not fail the workflow.
+    required: false
+    default: "false"
+  no-run-scripts:
+    description: Skip package scripts.
+    required: false
+    default: "false"
+  changed:
+    description: Scan only changed files.
+    required: false
+    default: "false"
+  base:
+    description: Base ref for changed-file scans.
+    required: false
+    default: origin/main
+  profile:
+    description: Risk profile to apply: relaxed, standard, or strict.
+    required: false
+    default: standard
+  design:
+    description: Enable DesignGuard for a product type: landing, saas, dashboard, marketplace, ecommerce, webapp, or mobile-app.
+    required: false
+    default: ""
+  design-only:
+    description: Run only DesignGuard. Keeps path for source UI checks but excludes technical/docs/security gates.
+    required: false
+    default: "false"
+  design-url:
+    description: URL to render for DesignGuard DOM, CSS, viewport, and screenshot proof.
+    required: false
+    default: ""
+  design-routes:
+    description: Comma-separated routes to audit with DesignGuard.
+    required: false
+    default: ""
+  design-viewports:
+    description: Comma-separated DesignGuard viewports: mobile, tablet, desktop.
+    required: false
+    default: ""
+  design-ai:
+    description: Run optional AI design review.
+    required: false
+    default: "false"
+  design-ai-provider:
+    description: AI provider for DesignGuard, either openai-api, codex-auth, or auto.
+    required: false
+    default: ""
+  design-ai-model:
+    description: AI model for DesignGuard, for example gpt-5-mini or gpt-5.3-codex-spark.
+    required: false
+    default: ""
+  sarif:
+    description: Optional SARIF output path.
+    required: false
+    default: ""
+  badge:
+    description: Optional SVG badge output path.
+    required: false
+    default: ""
+  html:
+    description: Optional HTML report path.
+    required: false
+    default: ""
+  pr-comment:
+    description: Optional compact Markdown PR comment output path.
+    required: false
+    default: ""
+  receipt:
+    description: Optional portable JSON evidence receipt path.
+    required: false
+    default: ""
+  summary:
+    description: Optional compact JSON summary path for bots and dashboards.
+    required: false
+    default: ""
+  history:
+    description: Optional JSONL history file to append this run to.
+    required: false
+    default: ""
+  claim:
+    description: Optional final agent claim text or file path to audit.
+    required: false
+    default: ""
+  baseline:
+    description: Optional baseline file to exclude known findings from the active score.
+    required: false
+    default: ""
+  update-baseline:
+    description: Optional baseline file to write from current findings.
+    required: false
+    default: ""
+  github-summary:
+    description: Append the compact AgentProof summary to GITHUB_STEP_SUMMARY.
+    required: false
+    default: "true"
+  github-annotations:
+    description: Emit GitHub log annotations for active findings.
+    required: false
+    default: "true"
+outputs:
+  score:
+    description: AgentProof score from 0 to 100.
+    value: ${{ steps.agentproof.outputs.score }}
+  verdict:
+    description: AgentProof verdict, for example SHIP or DO NOT SHIP.
+    value: ${{ steps.agentproof.outputs.verdict }}
+  report-path:
+    description: Markdown report path.
+    value: ${{ steps.agentproof.outputs.report-path }}
+  receipt-path:
+    description: Receipt path when the receipt input is set.
+    value: ${{ steps.agentproof.outputs.receipt-path }}
+  summary-path:
+    description: Compact summary path when the summary input is set.
+    value: ${{ steps.agentproof.outputs.summary-path }}
+  findings:
+    description: Active finding count.
+    value: ${{ steps.agentproof.outputs.findings }}
+  technical-score:
+    description: TechnicalGate score from 0 to 100.
+    value: ${{ steps.agentproof.outputs.technical-score }}
+  technical-verdict:
+    description: TechnicalGate verdict.
+    value: ${{ steps.agentproof.outputs.technical-verdict }}
+  design-score:
+    description: DesignGuard score from 0 to 100 when enabled.
+    value: ${{ steps.agentproof.outputs.design-score }}
+  design-verdict:
+    description: DesignGuard verdict when enabled.
+    value: ${{ steps.agentproof.outputs.design-verdict }}
+  design-findings:
+    description: Active DesignGuard finding count when enabled.
+    value: ${{ steps.agentproof.outputs.design-findings }}
+runs:
+  using: composite
+  steps:
+    - name: Run AgentProof
+      id: agentproof
+      shell: bash
+      run: |
+        set -euo pipefail
+        args=(--path "${{ inputs.path }}" --fail-under "${{ inputs.fail-under }}")
+
+        if [ "${{ inputs.github-summary }}" = "true" ]; then
+          args+=(--github-comment)
+        fi
+        if [ "${{ inputs.github-annotations }}" = "true" ]; then
+          args+=(--github-annotations)
+        fi
+        if [ "${{ inputs.observe-only }}" = "true" ]; then
+          args+=(--observe-only)
+        fi
+        if [ "${{ inputs.no-run-scripts }}" = "true" ]; then
+          args+=(--no-run-scripts)
+        fi
+        if [ "${{ inputs.changed }}" = "true" ]; then
+          args+=(--changed --base "${{ inputs.base }}")
+        fi
+        if [ -n "${{ inputs.profile }}" ]; then
+          args+=(--profile "${{ inputs.profile }}")
+        fi
+        if [ -n "${{ inputs.design }}" ]; then
+          args+=(--design "${{ inputs.design }}")
+        fi
+        if [ "${{ inputs.design-only }}" = "true" ]; then
+          args+=(--design-only)
+        fi
+        if [ -n "${{ inputs.design-url }}" ]; then
+          args+=(--design-url "${{ inputs.design-url }}")
+        fi
+        if [ -n "${{ inputs.design-routes }}" ]; then
+          args+=(--design-routes "${{ inputs.design-routes }}")
+        fi
+        if [ -n "${{ inputs.design-viewports }}" ]; then
+          args+=(--design-viewports "${{ inputs.design-viewports }}")
+        fi
+        if [ "${{ inputs.design-ai }}" = "true" ]; then
+          args+=(--design-ai)
+        fi
+        if [ -n "${{ inputs.design-ai-provider }}" ]; then
+          args+=(--design-ai-provider "${{ inputs.design-ai-provider }}")
+        fi
+        if [ -n "${{ inputs.design-ai-model }}" ]; then
+          args+=(--design-ai-model "${{ inputs.design-ai-model }}")
+        fi
+        if [ -n "${{ inputs.sarif }}" ]; then
+          args+=(--sarif "${{ inputs.sarif }}")
+        fi
+        if [ -n "${{ inputs.badge }}" ]; then
+          args+=(--badge "${{ inputs.badge }}")
+        fi
+        if [ -n "${{ inputs.html }}" ]; then
+          args+=(--html "${{ inputs.html }}")
+        fi
+        if [ -n "${{ inputs.pr-comment }}" ]; then
+          args+=(--pr-comment "${{ inputs.pr-comment }}")
+        fi
+        if [ -n "${{ inputs.receipt }}" ]; then
+          args+=(--receipt "${{ inputs.receipt }}")
+        fi
+        if [ -n "${{ inputs.summary }}" ]; then
+          args+=(--summary "${{ inputs.summary }}")
+        fi
+        if [ -n "${{ inputs.history }}" ]; then
+          args+=(--history "${{ inputs.history }}")
+        fi
+        if [ -n "${{ inputs.claim }}" ]; then
+          args+=(--claim "${{ inputs.claim }}")
+        fi
+        if [ -n "${{ inputs.baseline }}" ]; then
+          args+=(--baseline "${{ inputs.baseline }}")
+        fi
+        if [ -n "${{ inputs.update-baseline }}" ]; then
+          args+=(--update-baseline "${{ inputs.update-baseline }}")
+        fi
+
+        result_file="${RUNNER_TEMP:-.}/agentproof-action-result.json"
+        set +e
+        node "$GITHUB_ACTION_PATH/bin/agentproof.mjs" "${args[@]}" --json > "$result_file"
+        status=$?
+        set -e
+
+        cat "$result_file"
+
+        if [ -n "${GITHUB_OUTPUT:-}" ]; then
+          if node - "$result_file" "$GITHUB_OUTPUT" <<'NODE'
+        const fs = require('fs');
+        const [resultFile, outputFile] = process.argv.slice(2);
+        const result = JSON.parse(fs.readFileSync(resultFile, 'utf8'));
+        const lines = [
+          ['score', result.scoring?.score],
+          ['verdict', result.scoring?.verdict],
+          ['report-path', result.reportPath],
+          ['receipt-path', result.receiptPath || ''],
+          ['summary-path', result.summaryPath || ''],
+          ['findings', Array.isArray(result.issues) ? result.issues.length : ''],
+          ['technical-score', result.technicalScoring?.score ?? ''],
+          ['technical-verdict', result.technicalScoring?.verdict || ''],
+          ['design-score', result.design?.scoring?.score ?? ''],
+          ['design-verdict', result.design?.scoring?.verdict || ''],
+          ['design-findings', Array.isArray(result.design?.issues) ? result.design.issues.length : '']
+        ];
+        fs.appendFileSync(outputFile, lines.map(([name, value]) => `${name}=${String(value ?? '')}`).join('\n') + '\n');
+        NODE
+          then
+            true
+          else
+            echo "AgentProof could not parse JSON output for action outputs." >&2
+          fi
+        fi
+
+        exit "$status"

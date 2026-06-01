@@ -1,0 +1,17 @@
+node_modules
+.DS_Store
+.env
+.env.*
+!.env.example
+AGENT_PROOF_REPORT.md
+agentproof.json
+coverage
+dist
+build
+agentproof.sarif
+agentproof-badge.svg
+agentproof-report.html
+.agentproof/*
+!.agentproof/baseline.json
+agentproof-pr-comment.md
+agentproof-receipt.json

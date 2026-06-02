@@ -29,11 +29,11 @@ inputs:
     required: false
     default: origin/main
   profile:
-    description: Risk profile to apply: relaxed, standard, or strict.
+    description: "Risk profile to apply: relaxed, standard, or strict."
     required: false
     default: standard
   design:
-    description: Enable DesignGuard for a product type: landing, saas, dashboard, marketplace, ecommerce, webapp, or mobile-app.
+    description: "Enable DesignGuard for a product type: landing, saas, dashboard, marketplace, ecommerce, webapp, or mobile-app."
     required: false
     default: ""
   design-only:
@@ -49,7 +49,7 @@ inputs:
     required: false
     default: ""
   design-viewports:
-    description: Comma-separated DesignGuard viewports: mobile, tablet, desktop.
+    description: "Comma-separated DesignGuard viewports: mobile, tablet, desktop."
     required: false
     default: ""
   design-ai:

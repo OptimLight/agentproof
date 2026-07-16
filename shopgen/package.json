@@ -1,0 +1,19 @@
+{
+  "name": "shopgen",
+  "version": "0.1.0",
+  "description": "Outil privé de génération de boutiques Shopify complètes par IA — brand kit, copy CRO, pages, collections, navigation.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "shopgen": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0"
+  }
+}

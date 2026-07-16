@@ -13,7 +13,13 @@ function loadDotEnv() {
     const eq = trimmed.indexOf("=");
     if (eq === -1) continue;
     const key = trimmed.slice(0, eq).trim();
-    const value = trimmed.slice(eq + 1).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
     if (!(key in process.env)) process.env[key] = value;
   }
 }
@@ -22,7 +28,10 @@ export function getConfig({ requireShopify = true } = {}) {
   loadDotEnv();
   const missing = [];
   const cfg = {
-    storeDomain: process.env.SHOPIFY_STORE_DOMAIN,
+    // Tolère "https://boutique.myshopify.com/" collé depuis le navigateur.
+    storeDomain: process.env.SHOPIFY_STORE_DOMAIN?.replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "")
+      .trim(),
     adminToken: process.env.SHOPIFY_ADMIN_TOKEN,
     // Auth Claude, au choix (même mécanisme que n'importe quel agent existant) :
     // - ANTHROPIC_API_KEY : clé API classique
@@ -35,8 +44,10 @@ export function getConfig({ requireShopify = true } = {}) {
     currency: process.env.SHOP_CURRENCY || "EUR",
     root: ROOT,
   };
-  if (!cfg.anthropicKey && !cfg.anthropicAuthToken)
-    missing.push("ANTHROPIC_API_KEY ou ANTHROPIC_AUTH_TOKEN");
+  // Une passerelle locale (ANTHROPIC_BASE_URL) peut injecter l'auth elle-même :
+  // dans ce cas aucune clé n'est requise ici.
+  if (!cfg.anthropicKey && !cfg.anthropicAuthToken && !cfg.anthropicBaseUrl)
+    missing.push("ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN ou ANTHROPIC_BASE_URL");
   if (requireShopify) {
     if (!cfg.storeDomain) missing.push("SHOPIFY_STORE_DOMAIN");
     if (!cfg.adminToken) missing.push("SHOPIFY_ADMIN_TOKEN");

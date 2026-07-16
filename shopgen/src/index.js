@@ -64,31 +64,38 @@ async function main() {
     feedback = res.feedback;
   }
 
-  // 3. Contenu (avec boucle de validation)
-  let content = null;
-  feedback = null;
-  while (true) {
-    console.log(`\nRédaction du contenu de la boutique… (1-2 minutes)`);
-    content = await generateContent(cfg, product, brandKit, feedback);
-    printContentSummary(content);
-    if (autoYes) break;
-    const res = await checkpoint("Valider ce contenu et pousser vers Shopify ?");
-    if (res.action === "ok") break;
-    if (res.action === "quit") process.exit(0);
-    feedback = res.feedback;
-  }
-
-  // Audit : tout est sauvegardé localement quoi qu'il arrive
+  // Audit : chaque étape payée est sauvegardée immédiatement — un quit en
+  // cours de route ne perd jamais le brand kit déjà généré.
   const outDir = path.join(cfg.root, "shopgen-output");
   fs.mkdirSync(outDir, { recursive: true });
   const outFile = path.join(
     outDir,
     `${slugify(brandKit.brand_name)}-${Date.now()}.json`,
   );
-  fs.writeFileSync(
-    outFile,
-    JSON.stringify({ product, brandKit, content }, null, 2),
-  );
+  const saveRun = (content) =>
+    fs.writeFileSync(
+      outFile,
+      JSON.stringify({ product, brandKit, content }, null, 2),
+    );
+  saveRun(null);
+
+  // 3. Contenu (avec boucle de validation)
+  let content = null;
+  feedback = null;
+  while (true) {
+    console.log(`\nRédaction du contenu de la boutique… (1-2 minutes)`);
+    content = await generateContent(cfg, product, brandKit, feedback);
+    saveRun(content);
+    printContentSummary(content);
+    if (autoYes) break;
+    const res = await checkpoint("Valider ce contenu et pousser vers Shopify ?");
+    if (res.action === "ok") break;
+    if (res.action === "quit") {
+      console.log(`Génération sauvegardée : ${outFile}`);
+      process.exit(0);
+    }
+    feedback = res.feedback;
+  }
   console.log(`\nGénération sauvegardée : ${outFile}`);
 
   if (dryRun) {
@@ -149,12 +156,14 @@ Prochaines étapes manuelles (5 minutes) :
 }
 
 function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+  return (
+    text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "shop"
+  );
 }
 
 main().catch((err) => {

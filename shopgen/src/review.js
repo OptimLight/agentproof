@@ -49,11 +49,16 @@ export async function checkpoint(question) {
   });
   try {
     while (true) {
-      const answer = (
-        await rl.question(
-          `\n${question}\n  ${BOLD}ok${RESET} = valider · ${BOLD}regen <commentaire>${RESET} = régénérer · ${BOLD}quit${RESET} = abandonner\n> `,
-        )
-      ).trim();
+      let answer;
+      try {
+        answer = (
+          await rl.question(
+            `\n${question}\n  ${BOLD}ok${RESET} = valider · ${BOLD}regen <commentaire>${RESET} = régénérer · ${BOLD}quit${RESET} = abandonner\n> `,
+          )
+        ).trim();
+      } catch {
+        return { action: "quit" }; // stdin fermé (Ctrl+D, pipe) : abandon propre
+      }
       if (answer.toLowerCase() === "ok") return { action: "ok" };
       if (answer.toLowerCase() === "quit") return { action: "quit" };
       if (answer.toLowerCase().startsWith("regen")) {

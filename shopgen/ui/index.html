@@ -176,19 +176,32 @@
 
 <script>
 const state = { product: null, brand: null, content: null };
+let CURRENCY = "EUR";
 
 // ---------- utilitaires ----------
 const $ = (sel) => document.querySelector(sel);
 const api = async (path, body) => {
   const res = await fetch(path, {
     method: body ? "POST" : "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
-  const json = await res.json();
+  const text = await res.text();
+  let json;
+  try { json = JSON.parse(text); }
+  catch { throw new Error(`Réponse inattendue du serveur (HTTP ${res.status})`); }
   if (!res.ok || json.error) throw new Error(json.error || `HTTP ${res.status}`);
   return json;
 };
+// Les <input type=color> n'acceptent que #rrggbb : on normalise ce que le
+// modèle renvoie (#abc, sans dièse…) sans toucher à la valeur en état.
+function normalizeHex(v) {
+  const s = String(v || "").trim().replace(/^([0-9a-f]{3}|[0-9a-f]{6})$/i, "#$1");
+  if (/^#[0-9a-f]{6}$/i.test(s)) return s.toLowerCase();
+  if (/^#[0-9a-f]{3}$/i.test(s))
+    return "#" + [...s.slice(1)].map((c) => c + c).join("").toLowerCase();
+  return null;
+}
 function getPath(obj, path) { return path.split(".").reduce((o, k) => o?.[k], obj); }
 function setPath(obj, path, value) {
   const keys = path.split("."); const last = keys.pop();
@@ -213,7 +226,9 @@ function bindFields(root) {
   root.querySelectorAll("[data-bind]").forEach((el) => {
     const path = el.dataset.bind;
     const current = getPath(state, path);
-    if (current != null) el.value = current;
+    if (current != null) {
+      el.value = el.type === "color" ? normalizeHex(current) || "#888888" : current;
+    }
     if (!el.dataset.bound) {
       el.addEventListener("input", () => { setPath(state, path, el.value); renderPreview(); });
       el.dataset.bound = "1";
@@ -258,7 +273,7 @@ $("#btn-brand").addEventListener("click", async () => {
     });
     $("#brand-fields").hidden = false;
     bindFields($("#step-brand"));
-    $("#btn-brand").textContent = "Régénérer le brand kit";
+    btn.dataset.label = "Régénérer le brand kit"; // restauré par busy(false)
     unlock("#step-content");
     renderPreview();
   } catch (e) { $("#err-brand").textContent = e.message; }
@@ -276,7 +291,7 @@ $("#btn-content").addEventListener("click", async () => {
       feedback: $("#content-feedback").value.trim() || null,
     });
     showContent();
-    $("#btn-content").textContent = "Régénérer le contenu";
+    btn.dataset.label = "Régénérer le contenu"; // restauré par busy(false)
     unlock("#step-push");
   } catch (e) { $("#err-content").textContent = e.message; }
   finally { busy(btn, false); }
@@ -327,25 +342,30 @@ function showContent() {
 // ---------- étape 4 : push ----------
 $("#btn-push").addEventListener("click", async () => {
   const btn = $("#btn-push"); $("#err-push").textContent = "";
+  let pushed = false;
   try {
     busy(btn, true);
     const res = await api("/api/push", {
       product: state.product, brandKit: state.brand, content: state.content,
     });
+    pushed = true;
     $("#push-log").textContent =
       res.log.map((l) => "✓ " + l).join("\n") +
       `\n\nFinitions manuelles :\n  1. ${res.admin}/products — activer le produit\n  2. ${res.admin}/menus — assigner les menus au thème\n  3. Réglages du thème — appliquer palette et typos du brand kit`;
   } catch (e) { $("#err-push").textContent = e.message; }
   finally { busy(btn, false); }
+  if (pushed) { btn.textContent = "Poussé ✓"; btn.disabled = true; } // pas de double push
 });
 $("#btn-save").addEventListener("click", async () => {
-  $("#err-push").textContent = "";
+  const btn = $("#btn-save"); $("#err-push").textContent = "";
   try {
+    busy(btn, true);
     const res = await api("/api/save", {
       product: state.product, brandKit: state.brand, content: state.content,
     });
     $("#push-log").textContent = "✓ Sauvegardé : " + res.saved;
   } catch (e) { $("#err-push").textContent = e.message; }
+  finally { busy(btn, false); }
 });
 
 // ---------- aperçu live ----------
@@ -353,7 +373,7 @@ $("#btn-save").addEventListener("click", async () => {
 // allow-same-origin) : le document généré est totalement inerte — aucun
 // script ne peut s'y exécuter — tout en restant fidèle au rendu Shopify.
 function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 }
 function fontsHref(heading, body) {
   const families = [heading, body].filter(Boolean)
@@ -371,9 +391,10 @@ function renderPreview() {
   const bodyFont = escapeHtml(b?.typography?.body || "system-ui");
   const fonts = b ? fontsHref(b.typography?.heading, b.typography?.body) : null;
 
+  const cur = CURRENCY === "EUR" ? "€" : CURRENCY;
   const title = state.content?.product?.title || state.product.title || "";
-  const price = state.product.price ? `${state.product.price} €` : "";
-  const compare = state.product.compareAtPrice ? `<s style="opacity:.5">${escapeHtml(state.product.compareAtPrice)} €</s> ` : "";
+  const price = state.product.price ? `${state.product.price} ${cur}` : "";
+  const compare = state.product.compareAtPrice ? `<s style="opacity:.5">${escapeHtml(state.product.compareAtPrice)} ${escapeHtml(cur)}</s> ` : "";
   const img = (state.product.images || [])[0];
   const descHtml = state.content?.product?.description_html || "";
 
@@ -408,6 +429,7 @@ function renderPreview() {
 
 // ---------- init ----------
 api("/api/config").then((c) => {
+  CURRENCY = c.currency || "EUR";
   $("#cfg-status").textContent = c.shopifyConfigured
     ? `connecté à ${c.storeDomain}` : "génération seule (Shopify non configuré)";
 }).catch(() => { $("#cfg-status").textContent = "serveur injoignable"; });

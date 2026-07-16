@@ -11,10 +11,17 @@ const MODEL = "claude-opus-4-8";
 let client;
 function getClient(cfg) {
   if (!client) {
-    // Le SDK résout lui-même ANTHROPIC_API_KEY / ANTHROPIC_AUTH_TOKEN /
-    // ANTHROPIC_BASE_URL depuis l'environnement (chargé par config.js).
-    // Un token OAuth (bearer) exige en plus le header beta oauth.
+    // Trois modes d'auth :
+    // 1. Clé API classique (ANTHROPIC_API_KEY)
+    // 2. Token bearer/OAuth (ANTHROPIC_AUTH_TOKEN) — header beta oauth requis
+    // 3. Passerelle locale seule (ANTHROPIC_BASE_URL) : elle injecte l'auth,
+    //    on fournit une clé factice pour satisfaire le SDK.
+    const gatewayOnly =
+      !cfg.anthropicKey && !cfg.anthropicAuthToken && cfg.anthropicBaseUrl;
     client = new Anthropic({
+      apiKey: cfg.anthropicKey || (gatewayOnly ? "via-passerelle-locale" : undefined),
+      authToken: cfg.anthropicAuthToken || undefined,
+      baseURL: cfg.anthropicBaseUrl || undefined,
       defaultHeaders:
         !cfg.anthropicKey && cfg.anthropicAuthToken
           ? { "anthropic-beta": "oauth-2025-04-20" }
@@ -29,7 +36,9 @@ async function structuredCall(cfg, { system, user, schema, maxTokens }) {
     model: MODEL,
     max_tokens: maxTokens,
     thinking: { type: "adaptive" },
-    system,
+    // cache_control : les playbooks (gros et stables) sont mis en cache — les
+    // régénérations successives d'une même session coûtent ~10x moins cher.
+    system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
     output_config: { format: { type: "json_schema", schema } },
     messages: [{ role: "user", content: user }],
   });
@@ -43,7 +52,11 @@ async function structuredCall(cfg, { system, user, schema, maxTokens }) {
     );
   }
   const text = message.content.find((b) => b.type === "text")?.text;
-  if (!text) throw new Error("Réponse vide du modèle.");
+  if (!text) {
+    throw new Error(
+      `Réponse vide du modèle (stop_reason: ${message.stop_reason}).`,
+    );
+  }
   return JSON.parse(text);
 }
 

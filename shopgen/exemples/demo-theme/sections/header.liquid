@@ -1,0 +1,19 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="{{ routes.root_url }}" class="brand">{{ settings.brand_name | default: shop.name }}</a>
+    <nav class="site-nav">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+    <a href="{{ routes.cart_url }}" class="cart-link">Panier ({{ cart.item_count }})</a>
+  </div>
+</header>
+{% schema %}
+{
+  "name": "En-tête",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu principal", "default": "main-menu" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,155 @@
+{
+  "_note": "Génération de démonstration produite par le même modèle que shopgen appelle, en suivant les playbooks knowledge/*.md — format identique à une sortie réelle de l'outil (shopgen-output/).",
+  "product": {
+    "title": "Coussin cervical ergonomique à mémoire de forme",
+    "description": "Coussin cervical en mousse à mémoire de forme haute densité. Soutient la nuque et aligne la colonne pendant le sommeil. Housse en tissu respirant, déhoussable et lavable en machine. Dimensions 50x30x10cm. Convient aux dormeurs sur le dos et sur le côté.",
+    "price": "34.90",
+    "compareAtPrice": "49.90",
+    "vendor": "",
+    "tags": ["sommeil", "confort"],
+    "images": [],
+    "sourceUrl": null
+  },
+  "brandKit": {
+    "brand_name": "Nuqia",
+    "tagline": "Des nuits qui réparent",
+    "positioning": "Pour les actifs de 35 à 55 ans qui se réveillent avec la nuque raide et ont tout essayé sauf la cause : leur oreiller. Contre les oreillers « confort » génériques qui promettent du moelleux, Nuqia vend une seule chose : l'alignement de la colonne pendant le sommeil.",
+    "persona": {
+      "summary": "Actif ou active de 35 à 55 ans, travail sur écran, se réveille 2 à 3 fois par semaine avec des douleurs cervicales. A déjà changé d'oreiller plusieurs fois, parfois consulté un kiné ou pris des anti-douleurs. Sceptique envers les gadgets « ergonomiques ».",
+      "job_to_be_done": "Se réveiller sans douleur pour attaquer la journée normalement — pas acheter un coussin, acheter des matins sans raideur.",
+      "pains": [
+        "« Je me réveille plus fatigué que je me couche »",
+        "« J'ai changé d'oreiller trois fois, rien ne change »",
+        "« La douleur revient dans la journée dès que je suis au bureau »",
+        "« Les séances de kiné soulagent mais ça revient toujours »"
+      ],
+      "desires": [
+        "Se réveiller et tourner la tête sans y penser",
+        "Arrêter de dépendre des anti-douleurs et des rendez-vous",
+        "Retrouver un vrai sommeil profond, sans micro-réveils"
+      ],
+      "objections": [
+        "« Encore un gadget ergonomique comme les autres »",
+        "« Et si la mousse est trop dure pour moi ? »",
+        "« Comment savoir si ça convient à ma façon de dormir ? »",
+        "« 35 €, c'est plus cher qu'un oreiller classique »",
+        "« Et si ça ne marche pas sur moi ? »"
+      ],
+      "triggers": [
+        "Un réveil particulièrement douloureux après une mauvaise nuit",
+        "Une recommandation du kiné d'investir dans un vrai soutien cervical",
+        "La fin d'un oreiller affaissé qu'il faut de toute façon remplacer"
+      ],
+      "awareness_level": "conscient_de_la_solution"
+    },
+    "tone_of_voice": {
+      "description": "Complice et direct, comme un ami kiné qui explique sans jargon. Précis sur les faits, jamais sur-vendeur. Phrases courtes.",
+      "address": "tu",
+      "do": [
+        "Parler des matins, pas du produit",
+        "Ancrer chaque promesse dans une caractéristique vérifiable",
+        "Nommer les doutes avant que le lecteur les formule"
+      ],
+      "dont": [
+        "Jargon médical non expliqué",
+        "Superlatifs vides (révolutionnaire, incroyable)",
+        "Fausse urgence ou faux compteurs"
+      ]
+    },
+    "palette": {
+      "background": "#f7f5f0",
+      "secondary": "#dce4e0",
+      "accent": "#2f6b5e",
+      "text": "#1f2421",
+      "rationale": "Tons calmes et naturels évoquant le sommeil et le soin : fond crème doux (60%), vert d'eau apaisant (30%), vert profond réservé aux CTA et prix (10%). Contraste texte/fond largement lisible."
+    },
+    "typography": {
+      "heading": "Fraunces",
+      "body": "Nunito Sans",
+      "rationale": "Fraunces apporte la chaleur et le sérieux d'une marque de soin ; Nunito Sans reste très lisible en corps de texte, y compris sur mobile."
+    },
+    "photo_style": "Lumière douce du matin, chambre épurée aux tons lin et bois clair, draps froissés naturels. Le coussin en situation réelle, jamais sur fond studio blanc. Une présence humaine suggérée (épaule, nuque détendue), pas de visages souriants artificiels."
+  },
+  "content": {
+    "product": {
+      "title": "Coussin cervical Nuqia — réveille-toi sans douleur",
+      "description_html": "<h2>Ta nuque travaille toute la nuit. Donne-lui enfin le bon appui.</h2><p>Si tu te réveilles la nuque raide deux ou trois matins par semaine, ton oreiller n'amortit pas le problème : il le crée. Le coussin Nuqia maintient ta colonne alignée pendant que tu dors — c'est tout, et ça change tout.</p><h3>Ce que ça change, concrètement</h3><ul><li><strong>Des matins sans raideur</strong> — la mousse haute densité épouse le creux de ta nuque et garde ta colonne droite, sur le dos comme sur le côté.</li><li><strong>Un soutien qui ne s'affaisse pas</strong> — la mémoire de forme haute densité reprend sa forme chaque nuit, là où un oreiller classique se tasse en quelques mois.</li><li><strong>Tu dors au frais</strong> — housse en tissu respirant, déhoussable et lavable en machine : hygiène simple, chaleur évacuée.</li><li><strong>Adapté à ta position</strong> — son profil 50 × 30 × 10 cm est étudié pour les dormeurs sur le dos et sur le côté.</li></ul><h3>Comment bien démarrer</h3><ol><li>Place le côté galbé sous ta nuque, le creux épouse tes cervicales.</li><li>Laisse à ton corps 3 à 5 nuits d'adaptation — c'est normal, il désapprend des années de mauvaise position.</li><li>Lave la housse à 30° une fois par mois, la mousse reste intacte.</li></ol><h3>Questions que tu te poses sûrement</h3><h4>La mousse à mémoire de forme, ce n'est pas trop dur ?</h4><p>Non : la densité élevée ne veut pas dire fermeté élevée. La mousse cède sous la chaleur de ton corps et se fige dans la position qui te soutient. Sensation d'accueil moelleux, maintien ferme dessous.</p><h4>Je dors sur le côté, ça marche pour moi ?</h4><p>Oui. Le profil de 10 cm comble l'espace entre l'épaule et la tête, exactement ce qu'il faut pour garder la colonne droite sur le côté. Seuls les dormeurs exclusivement sur le ventre ne sont pas concernés.</p><h4>Et si je ne sens pas de différence ?</h4><p>Tu as [30 jours] pour tester chez toi. Si tes matins ne changent pas, tu le renvoies et tu es remboursé — sans formulaire à rallonge ni question piège.</p><h4>Pourquoi 34,90 € quand un oreiller en fait 15 ?</h4><p>Parce qu'un oreiller à 15 € se tasse et se remplace chaque année. La mousse haute densité de Nuqia garde son maintien plusieurs années — et tes cervicales, elles, n'ont pas de prix de remplacement.</p><h3>Garantie matins meilleurs</h3><p>Essaie-le [30 nuits]. Pas convaincu ? Retour simple et remboursement intégral. Tu ne risques rien d'autre que de mieux dormir.</p>",
+      "seo_title": "Coussin cervical mémoire de forme — Nuqia",
+      "seo_description": "Réveille-toi sans douleur cervicale : coussin ergonomique à mémoire de forme haute densité, housse lavable. Essai [30 nuits], retour gratuit.",
+      "tags": ["sommeil", "confort", "cervicales", "bien-dormir"]
+    },
+    "pages": [
+      {
+        "title": "À propos de Nuqia",
+        "handle": "a-propos",
+        "body_html": "<h2>Nuqia est née d'un ras-le-bol : se réveiller cassé</h2><p>Pendant des années, on a fait comme toi : changer d'oreiller, empiler les coussins, tester le « spécial cervicales » du supermarché. Rien ne tenait plus de trois mois.</p><p>Le déclic est venu d'un constat simple, confirmé par les kinés : ce n'est pas le moelleux qui compte, c'est l'alignement. Une colonne droite pendant 7 heures, et la nuque arrête de compenser.</p><h3>Nos trois engagements</h3><ul><li><strong>L'alignement d'abord</strong> — chaque produit Nuqia est pensé pour la posture, pas pour la photo.</li><li><strong>Des faits, pas des promesses</strong> — densité, dimensions, matières : tout est vérifiable sur la fiche.</li><li><strong>Le droit de changer d'avis</strong> — essai [30 nuits], remboursement intégral, sans discussion.</li></ul><p>Bonnes nuits,<br>L'équipe Nuqia</p>"
+      },
+      {
+        "title": "Contact",
+        "handle": "contact",
+        "body_html": "<h2>On te répond vite</h2><p>Une question sur ta commande, la livraison ou le produit ? Écris-nous : <strong>[contact@tamarque.fr]</strong></p><p>On répond sous [24 h ouvrées]. Pour les questions sur l'utilisation du coussin, la réponse est souvent déjà dans la FAQ.</p>"
+      },
+      {
+        "title": "Livraison & retours",
+        "handle": "livraison-retours",
+        "body_html": "<h2>Livraison</h2><ul><li>Expédition sous [24-48 h] depuis notre entrepôt.</li><li>Livraison en France métropolitaine sous [3 à 5 jours ouvrés], suivi envoyé par email.</li><li>Frais de livraison : [4,90 € — offerts dès 50 € d'achat].</li></ul><h2>Retours</h2><ul><li>Tu as [30 jours] après réception pour changer d'avis.</li><li>Écris-nous à [contact@tamarque.fr], on t'envoie l'étiquette retour.</li><li>Remboursement intégral sous [5 jours] après réception du colis.</li></ul>"
+      },
+      {
+        "title": "FAQ",
+        "handle": "faq",
+        "body_html": "<h2>Questions fréquentes</h2><h3>Quand vais-je recevoir ma commande ?</h3><p>Expédition sous [24-48 h], livraison en [3 à 5 jours ouvrés] en France métropolitaine. Tu reçois un lien de suivi par email dès l'expédition.</p><h3>Le paiement est-il sécurisé ?</h3><p>Oui — paiement chiffré via les solutions de Shopify (CB, Apple Pay, Google Pay). Nous ne voyons ni ne stockons jamais tes données bancaires.</p><h3>Comment fonctionne la garantie ?</h3><p>Tu testes le produit [30 nuits]. S'il ne te convient pas, retour et remboursement intégral, sans justification.</p><h3>La housse est-elle lavable ?</h3><p>Oui, en machine à 30°. La mousse, elle, ne se lave pas — c'est la housse qui protège.</p><h3>Combien de temps dure la mousse ?</h3><p>La mousse haute densité garde son maintien plusieurs années dans des conditions normales d'utilisation, là où un oreiller classique se tasse en quelques mois.</p>"
+      },
+      {
+        "title": "Conditions générales de vente",
+        "handle": "cgv",
+        "body_html": "<h2>Conditions générales de vente</h2><p><em>[À personnaliser avec tes informations légales : dénomination, SIREN, adresse, TVA.]</em></p><h3>1. Commandes</h3><p>Toute commande passée sur la boutique implique l'acceptation des présentes conditions. La commande est confirmée par email après validation du paiement.</p><h3>2. Prix</h3><p>Les prix sont indiqués en euros, toutes taxes comprises, hors frais de livraison précisés avant validation.</p><h3>3. Livraison</h3><p>Voir la page Livraison &amp; retours. Les délais sont indicatifs ; un retard ne peut donner lieu à des dommages et intérêts.</p><h3>4. Droit de rétractation</h3><p>Conformément au Code de la consommation, tu disposes de 14 jours après réception pour exercer ton droit de rétractation — étendu contractuellement à [30 jours].</p><h3>5. Garanties légales</h3><p>Tous nos produits bénéficient de la garantie légale de conformité (2 ans) et de la garantie contre les vices cachés.</p>"
+      },
+      {
+        "title": "Politique de confidentialité",
+        "handle": "confidentialite",
+        "body_html": "<h2>Politique de confidentialité</h2><p>Tes données servent uniquement à traiter ta commande : facturation, livraison, service client. Elles ne sont jamais revendues.</p><h3>Données collectées</h3><ul><li>Identité et coordonnées de livraison</li><li>Historique de commandes</li><li>Données de navigation (cookies de mesure d'audience)</li></ul><h3>Tes droits</h3><p>Conformément au RGPD, tu peux accéder à tes données, les rectifier ou demander leur suppression en écrivant à [contact@tamarque.fr].</p><p><em>[À compléter : durée de conservation, outils tiers utilisés (analytics, emailing).]</em></p>"
+      },
+      {
+        "title": "Mentions légales",
+        "handle": "mentions-legales",
+        "body_html": "<h2>Mentions légales</h2><p><em>[À personnaliser :]</em></p><ul><li>Éditeur du site : [dénomination sociale, forme juridique]</li><li>SIREN/SIRET : [numéro]</li><li>Siège social : [adresse]</li><li>Directeur de publication : [nom]</li><li>Hébergeur : Shopify Inc., 151 O'Connor Street, Ottawa, Canada</li><li>Contact : [contact@tamarque.fr]</li></ul>"
+      },
+      {
+        "title": "Politique de remboursement",
+        "handle": "remboursement",
+        "body_html": "<h2>Politique de remboursement</h2><p>Tu as [30 jours] après réception pour retourner ton produit, quelle qu'en soit la raison.</p><h3>Comment ça se passe</h3><ol><li>Écris-nous à [contact@tamarque.fr] avec ton numéro de commande.</li><li>On t'envoie l'étiquette de retour sous [24 h].</li><li>Dès réception du colis, remboursement intégral sous [5 jours] sur ton moyen de paiement d'origine.</li></ol><p>Le produit doit être renvoyé avec sa housse, dans un état permettant sa revérification. En cas de doute, écris-nous d'abord : on trouve toujours une solution.</p>"
+      }
+    ],
+    "collections": [
+      {
+        "title": "Mieux dormir",
+        "handle": "mieux-dormir",
+        "description_html": "<p>Tout ce qui aide tes nuits à réparer tes journées : soutien cervical, alignement, confort durable. Sélection pensée pour ceux qui se réveillent fatigués.</p>",
+        "tag": "sommeil"
+      },
+      {
+        "title": "Confort au quotidien",
+        "handle": "confort-quotidien",
+        "description_html": "<p>Des produits qui soulagent la nuque et le dos, du lit au bureau. Parce que la posture ne prend pas de pause.</p>",
+        "tag": "confort"
+      }
+    ],
+    "menu": {
+      "main": [
+        { "title": "Accueil", "type": "home", "handle": "" },
+        { "title": "Le coussin", "type": "product", "handle": "" },
+        { "title": "Mieux dormir", "type": "collection", "handle": "mieux-dormir" },
+        { "title": "Notre histoire", "type": "page", "handle": "a-propos" },
+        { "title": "FAQ", "type": "page", "handle": "faq" }
+      ],
+      "footer": [
+        { "title": "Livraison & retours", "type": "page", "handle": "livraison-retours" },
+        { "title": "Remboursement", "type": "page", "handle": "remboursement" },
+        { "title": "CGV", "type": "page", "handle": "cgv" },
+        { "title": "Confidentialité", "type": "page", "handle": "confidentialite" },
+        { "title": "Mentions légales", "type": "page", "handle": "mentions-legales" },
+        { "title": "Contact", "type": "page", "handle": "contact" }
+      ]
+    }
+  }
+}

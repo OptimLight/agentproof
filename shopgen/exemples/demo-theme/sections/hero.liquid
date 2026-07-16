@@ -1,0 +1,21 @@
+<section class="hero" style="background: var(--secondary);">
+  <div class="wrap hero-inner">
+    <h1 class="hero-title">{{ section.settings.headline }}</h1>
+    <p class="hero-sub">{{ section.settings.subtext }}</p>
+    {% if section.settings.button_url != blank %}
+      <a href="{{ section.settings.button_url }}" class="cta">{{ section.settings.button_label }}</a>
+    {% endif %}
+  </div>
+{% schema %}
+{
+  "name": "Bannière d'accueil",
+  "settings": [
+    { "type": "text", "id": "headline", "label": "Titre", "default": "Des nuits qui réparent" },
+    { "type": "textarea", "id": "subtext", "label": "Sous-titre", "default": "Pour les actifs de 35 à 55 ans qui se réveillent avec la nuque raide et ont tout essayé sauf la cause : leur oreiller. Contre les oreillers « confort » génériques qui promettent du moelleux, Nuqia vend une seule chose : l'alignement de la colonne pendant le sommeil." },
+    { "type": "url", "id": "button_url", "label": "Lien du bouton" },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Découvrir" }
+  ],
+  "presets": [{ "name": "Bannière d'accueil" }]
+}
+{% endschema %}
+</section>

@@ -10,6 +10,7 @@
     "examples",
     "docs/launch-kit",
     "homepage",
+    "shopgen/shopgen-output",
     "AGENT_PROOF_REPORT.md",
     "agentproof-report.md",
     "agentproof-report.html",
@@ -36,6 +37,12 @@
     "hygiene.console-log": "low"
   },
   "suppressions": [
+    {
+      "id": "hygiene.console-log",
+      "file": "shopgen/src/*",
+      "reason": "shopgen is an interactive CLI: console output is its user interface, matching the src/index.js precedent.",
+      "expires": "2026-12-31"
+    },
     {
       "id": "slop.generic-copy",
       "file": "docs/internal-drafts/*",

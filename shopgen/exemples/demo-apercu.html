@@ -1,0 +1,93 @@
+<!doctype html><html lang=fr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Nuqia — aperçu thème Liquid</title>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>:root{--bg:#f7f5f0;--secondary:#dce4e0;--accent:#2f6b5e;--text:#1f2421;--font-heading:'Fraunces',Georgia,serif;--font-body:'Nunito Sans',system-ui,sans-serif}
+/* Thème généré par shopgen — couleurs et polices pilotées par les réglages */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; font-size: 16px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4 { font-family: var(--font-heading); line-height: 1.2; }
+
+/* header / footer */
+.site-header { border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 22px; flex-wrap: wrap; }
+.brand { font-family: var(--font-heading); font-weight: 700; font-size: 20px; }
+.site-nav { display: flex; gap: 20px; flex-wrap: wrap; font-size: 15px; }
+.site-nav a:hover { color: var(--accent); }
+.cart-link { font-size: 14px; }
+.site-footer { background: var(--secondary); margin-top: 60px; padding: 40px 0 24px; }
+.footer-inner { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+.footer-nav { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.tagline { opacity: .75; font-size: 14px; margin: 6px 0 0; }
+.footer-legal { margin-top: 24px; font-size: 12px; opacity: .6; }
+
+/* hero */
+.hero { padding: 70px 0; }
+.hero-title { font-size: clamp(28px, 5vw, 46px); margin: 0 0 14px; max-width: 16ch; }
+.hero-sub { font-size: 18px; max-width: 52ch; opacity: .85; margin: 0 0 26px; }
+
+/* boutons */
+.cta { display: inline-block; background: var(--accent); color: var(--bg); font-weight: 700; border: 0; border-radius: 10px; padding: 14px 28px; font-size: 16px; font-family: inherit; cursor: pointer; }
+.cta:hover { filter: brightness(1.08); }
+.cta[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* réassurance */
+.reassurance { background: var(--secondary); }
+.reassurance-inner { display: flex; justify-content: space-around; gap: 20px; padding: 22px 0; flex-wrap: wrap; text-align: center; }
+.reassure-item { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.reassure-item strong { font-size: 15px; }
+
+/* produit */
+.product-page { padding: 40px 0; }
+.product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+.product-image { width: 100%; border-radius: 14px; }
+.thumbs { display: flex; gap: 8px; margin-top: 10px; }
+.thumbs img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; }
+.image-slot { width: 100%; aspect-ratio: 4/3; border-radius: 14px; background: color-mix(in srgb, var(--accent) 12%, var(--secondary)); display: flex; align-items: center; justify-content: center; color: color-mix(in srgb, var(--text) 55%, transparent); font-size: 14px; text-align: center; padding: 20px; }
+.product-title { font-size: clamp(24px, 4vw, 34px); margin: 0 0 10px; }
+.product-price { font-size: 24px; margin: 0 0 20px; }
+.product-price s { opacity: .45; font-size: 18px; margin-right: 10px; }
+.opt-label { display: block; font-size: 13px; margin: 12px 0 4px; opacity: .7; }
+.opt-select { padding: 8px 10px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--text) 20%, transparent); font: inherit; }
+.product-form .cta { width: 100%; margin-top: 16px; }
+.reassure-inline { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; opacity: .75; margin: 16px 0 30px; }
+
+/* contenu riche (product.description, pages) */
+.rte h2 { font-size: 22px; margin: 34px 0 8px; }
+.rte h3 { font-size: 18px; margin: 26px 0 6px; }
+.rte h4 { font-size: 15.5px; margin: 18px 0 4px; }
+.rte p, .rte li { font-size: 15.5px; }
+.rte ul, .rte ol { padding-left: 20px; }
+.rte li { margin-bottom: 8px; }
+
+/* pages & collections */
+.page { padding: 46px 0; }
+.page-narrow { max-width: 680px; }
+.page-title { font-size: clamp(26px, 4vw, 36px); margin: 0 0 18px; }
+.collection { padding: 40px 0; }
+.product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; margin-top: 22px; }
+.card { display: flex; flex-direction: column; gap: 6px; }
+.card img, .card-ph { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
+.card-title { font-weight: 600; }
+.card-price { opacity: .7; font-size: 14px; }
+.cart-line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent); }
+.cart-total { font-weight: 700; margin: 18px 0; }
+
+@media (max-width: 760px) {
+  .product-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.banner{background:var(--accent);color:var(--bg);text-align:center;padding:8px;font:600 13px var(--font-body)}</style></head><body class=template-product>
+<div class=banner>Aperçu fidèle du thème Liquid généré (assets/theme.css réel) — rendu du template product.json</div>
+<header class=site-header><div class="wrap header-inner"><a class=brand>Nuqia</a><nav class=site-nav><a>Accueil</a><a>Le coussin</a><a>Mieux dormir</a><a>Notre histoire</a><a>FAQ</a></nav><a class=cart-link>Panier (0)</a></div></header>
+<main><section class=product-page><div class="wrap product-grid">
+<div class=product-media><div class=image-slot>Ajoute tes photos produit ici</div></div>
+<div class=product-info><h1 class=product-title>Coussin cervical Nuqia — réveille-toi sans douleur</h1>
+<p class=product-price><s>49,90 €</s><strong>34,90 €</strong></p>
+<button class=cta>Ajouter au panier</button>
+<div class=reassure-inline><span>Essai satisfait ou remboursé</span><span>Paiement sécurisé</span><span>Retour simple</span></div>
+<div class="rte product-description"><h2>Ta nuque travaille toute la nuit. Donne-lui enfin le bon appui.</h2><p>Si tu te réveilles la nuque raide deux ou trois matins par semaine, ton oreiller n'amortit pas le problème : il le crée. Le coussin Nuqia maintient ta colonne alignée pendant que tu dors — c'est tout, et ça change tout.</p><h3>Ce que ça change, concrètement</h3><ul><li><strong>Des matins sans raideur</strong> — la mousse haute densité épouse le creux de ta nuque et garde ta colonne droite, sur le dos comme sur le côté.</li><li><strong>Un soutien qui ne s'affaisse pas</strong> — la mémoire de forme haute densité reprend sa forme chaque nuit, là où un oreiller classique se tasse en quelques mois.</li><li><strong>Tu dors au frais</strong> — housse en tissu respirant, déhoussable et lavable en machine : hygiène simple, chaleur évacuée.</li><li><strong>Adapté à ta position</strong> — son profil 50 × 30 × 10 cm est étudié pour les dormeurs sur le dos et sur le côté.</li></ul><h3>Comment bien démarrer</h3><ol><li>Place le côté galbé sous ta nuque, le creux épouse tes cervicales.</li><li>Laisse à ton corps 3 à 5 nuits d'adaptation — c'est normal, il désapprend des années de mauvaise position.</li><li>Lave la housse à 30° une fois par mois, la mousse reste intacte.</li></ol><h3>Questions que tu te poses sûrement</h3><h4>La mousse à mémoire de forme, ce n'est pas trop dur ?</h4><p>Non : la densité élevée ne veut pas dire fermeté élevée. La mousse cède sous la chaleur de ton corps et se fige dans la position qui te soutient. Sensation d'accueil moelleux, maintien ferme dessous.</p><h4>Je dors sur le côté, ça marche pour moi ?</h4><p>Oui. Le profil de 10 cm comble l'espace entre l'épaule et la tête, exactement ce qu'il faut pour garder la colonne droite sur le côté. Seuls les dormeurs exclusivement sur le ventre ne sont pas concernés.</p><h4>Et si je ne sens pas de différence ?</h4><p>Tu as [30 jours] pour tester chez toi. Si tes matins ne changent pas, tu le renvoies et tu es remboursé — sans formulaire à rallonge ni question piège.</p><h4>Pourquoi 34,90 € quand un oreiller en fait 15 ?</h4><p>Parce qu'un oreiller à 15 € se tasse et se remplace chaque année. La mousse haute densité de Nuqia garde son maintien plusieurs années — et tes cervicales, elles, n'ont pas de prix de remplacement.</p><h3>Garantie matins meilleurs</h3><p>Essaie-le [30 nuits]. Pas convaincu ? Retour simple et remboursement intégral. Tu ne risques rien d'autre que de mieux dormir.</p></div></div>
+</div></section></main>
+<footer class=site-footer><div class="wrap footer-inner"><div class=footer-brand><span class=brand>Nuqia</span><p class=tagline>Des nuits qui réparent</p></div><nav class=footer-nav><a>Livraison & retours</a><a>Remboursement</a><a>CGV</a><a>Confidentialité</a><a>Mentions légales</a><a>Contact</a></nav></div><div class="wrap footer-legal">© 2026 Nuqia</div></footer>
+</body></html>

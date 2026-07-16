@@ -1,0 +1,56 @@
+<section class="product-page">
+  <div class="wrap product-grid">
+    <div class="product-media">
+      {%- if product.featured_image -%}
+        <img class="product-image" src="{{ product.featured_image | image_url: width: 1000 }}" alt="{{ product.featured_image.alt | escape | default: product.title }}" width="1000" loading="eager">
+        {%- if product.images.size > 1 -%}
+          <div class="thumbs">
+            {%- for image in product.images limit: 4 -%}
+              <img src="{{ image | image_url: width: 200 }}" alt="" width="200" loading="lazy">
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="image-slot">Ajoute tes photos produit ici</div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-info">
+      <h1 class="product-title">{{ product.title }}</h1>
+      <p class="product-price">
+        {%- if product.compare_at_price > product.price -%}
+          <s>{{ product.compare_at_price | money }}</s>
+        {%- endif -%}
+        <strong>{{ product.price | money }}</strong>
+      </p>
+
+      {%- form 'product', product, class: 'product-form' -%}
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <label class="opt-label">{{ option.name }}</label>
+            <select name="options[{{ option.name | escape }}]" class="opt-select">
+              {%- for value in option.values -%}
+                <option value="{{ value | escape }}">{{ value }}</option>
+              {%- endfor -%}
+            </select>
+          {%- endfor -%}
+        {%- endunless -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <button type="submit" class="cta" {% unless product.available %}disabled{% endunless %}>
+          {%- if product.available -%}Ajouter au panier{%- else -%}Épuisé{%- endif -%}
+        </button>
+      {%- endform -%}
+
+      <div class="reassure-inline">
+        <span>Essai satisfait ou remboursé</span>
+        <span>Paiement sécurisé</span>
+        <span>Retour simple</span>
+      </div>
+
+      <div class="rte product-description">{{ product.description }}</div>
+    </div>
+  </div>
+{% schema %}
+{ "name": "Fiche produit", "settings": [] }
+{% endschema %}
+</section>

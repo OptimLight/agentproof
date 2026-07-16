@@ -66,9 +66,9 @@
 
     <section class="step" id="step-product">
       <h2>1 · Produit source</h2>
-      <label>URL d'un produit Shopify public</label>
+      <label>URL d'un produit Shopify public — ex : https://boutique.com/products/mon-produit</label>
       <div class="row">
-        <div style="flex:3"><input type="url" id="product-url" placeholder="https://boutique.com/products/mon-produit"></div>
+        <div style="flex:3"><input type="url" id="product-url"></div>
         <div style="flex:0"><button id="btn-ingest">Importer</button></div>
       </div>
       <div id="product-fields" hidden>
@@ -93,7 +93,10 @@
       <h2>2 · Brand kit <span class="hint">— tout est modifiable en direct</span></h2>
       <div class="actions">
         <button id="btn-brand">Générer le brand kit</button>
-        <input type="text" id="brand-feedback" placeholder="Commentaire de régénération (ex: plus haut de gamme)" style="flex:1; min-width: 220px;">
+        <div style="flex:1; min-width: 220px;">
+          <label style="margin-top:0">Commentaire de régénération — ex : plus haut de gamme</label>
+          <input type="text" id="brand-feedback">
+        </div>
       </div>
       <div id="brand-fields" hidden>
         <div class="row">
@@ -126,7 +129,10 @@
       <h2>3 · Contenu <span class="hint">— l'aperçu à droite reflète tes modifications</span></h2>
       <div class="actions">
         <button id="btn-content">Rédiger le contenu</button>
-        <input type="text" id="content-feedback" placeholder="Commentaire de régénération (ex: FAQ plus rassurante)" style="flex:1; min-width: 220px;">
+        <div style="flex:1; min-width: 220px;">
+          <label style="margin-top:0">Commentaire de régénération — ex : FAQ plus rassurante</label>
+          <input type="text" id="content-feedback">
+        </div>
       </div>
       <div id="content-fields" hidden>
         <label>Titre produit</label>
@@ -161,7 +167,10 @@
   </div>
 
   <div id="preview-pane">
-    <div id="shop-preview"><div class="pv-empty">L'aperçu de ta boutique apparaîtra ici<br>au fil des étapes.</div></div>
+    <div class="pv-empty" id="pv-empty">L'aperçu de ta boutique apparaîtra ici<br>au fil des étapes.</div>
+    <!-- iframe sandboxée sans allow-scripts : le HTML généré est rendu
+         de façon inerte, fidèle à ce que Shopify affichera. -->
+    <iframe id="pv-frame" sandbox="" title="Aperçu boutique" style="width:100%; height:100vh; border:0; display:none"></iframe>
   </div>
 </main>
 
@@ -188,8 +197,14 @@ function setPath(obj, path, value) {
 }
 function busy(btn, on) {
   btn.disabled = on;
-  if (on) { btn.dataset.label = btn.textContent; btn.innerHTML = '<span class="spinner"></span>' + btn.dataset.label; }
-  else btn.textContent = btn.dataset.label || btn.textContent;
+  if (on) {
+    btn.dataset.label = btn.textContent;
+    const spinner = document.createElement("span");
+    spinner.className = "spinner";
+    btn.replaceChildren(spinner, document.createTextNode(btn.dataset.label));
+  } else {
+    btn.textContent = btn.dataset.label || btn.textContent;
+  }
 }
 function unlock(id) { $(id).classList.remove("locked"); }
 
@@ -266,25 +281,44 @@ $("#btn-content").addEventListener("click", async () => {
   } catch (e) { $("#err-content").textContent = e.message; }
   finally { busy(btn, false); }
 });
+// Construit un bloc <details> repliable sans jamais injecter de HTML :
+// tout le texte passe par textContent, le textarea est lié via data-bind.
+function buildDetails(titleText, hintText, bindPath, textareaClass) {
+  const details = document.createElement("details");
+  const summary = document.createElement("summary");
+  summary.append(document.createTextNode(titleText + " "));
+  const hint = document.createElement("span");
+  hint.className = "hint";
+  hint.textContent = hintText;
+  summary.appendChild(hint);
+  const inner = document.createElement("div");
+  inner.className = "inner";
+  const textarea = document.createElement("textarea");
+  if (textareaClass) textarea.className = textareaClass;
+  textarea.dataset.bind = bindPath;
+  inner.appendChild(textarea);
+  details.append(summary, inner);
+  return details;
+}
 function showContent() {
   $("#content-fields").hidden = false;
   bindFields($("#step-content"));
-  $("#content-tags").innerHTML = state.content.product.tags
-    .map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join("");
-  $("#content-pages").innerHTML = "";
-  state.content.pages.forEach((page, i) => {
-    const d = document.createElement("details");
-    d.innerHTML = `<summary>${escapeHtml(page.title)} <span class="hint">/pages/${escapeHtml(page.handle)}</span></summary>
-      <div class="inner"><textarea class="html" data-bind="content.pages.${i}.body_html"></textarea></div>`;
-    $("#content-pages").appendChild(d);
-  });
-  $("#content-collections").innerHTML = "";
-  state.content.collections.forEach((c, i) => {
-    const d = document.createElement("details");
-    d.innerHTML = `<summary>${escapeHtml(c.title)} <span class="hint">tag: ${escapeHtml(c.tag)}</span></summary>
-      <div class="inner"><textarea data-bind="content.collections.${i}.description_html"></textarea></div>`;
-    $("#content-collections").appendChild(d);
-  });
+  $("#content-tags").replaceChildren(
+    ...state.content.product.tags.map((t) => {
+      const span = document.createElement("span");
+      span.className = "tag";
+      span.textContent = t;
+      return span;
+    }),
+  );
+  $("#content-pages").replaceChildren(
+    ...state.content.pages.map((page, i) =>
+      buildDetails(page.title, `/pages/${page.handle}`, `content.pages.${i}.body_html`, "html")),
+  );
+  $("#content-collections").replaceChildren(
+    ...state.content.collections.map((c, i) =>
+      buildDetails(c.title, `tag: ${c.tag}`, `content.collections.${i}.description_html`, "")),
+  );
   bindFields($("#content-pages"));
   bindFields($("#content-collections"));
   renderPreview();
@@ -315,56 +349,61 @@ $("#btn-save").addEventListener("click", async () => {
 });
 
 // ---------- aperçu live ----------
-let fontLink = null;
-function loadFonts(heading, body) {
-  const families = [heading, body].filter(Boolean)
-    .map((f) => "family=" + encodeURIComponent(f.trim()).replace(/%20/g, "+") + ":wght@400;600;700").join("&");
-  if (!families) return;
-  const href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
-  if (fontLink?.href === href) return;
-  fontLink?.remove();
-  fontLink = document.createElement("link");
-  fontLink.rel = "stylesheet"; fontLink.href = href;
-  document.head.appendChild(fontLink);
-}
+// L'aperçu est rendu dans une iframe sandboxée (sans allow-scripts ni
+// allow-same-origin) : le document généré est totalement inerte — aucun
+// script ne peut s'y exécuter — tout en restant fidèle au rendu Shopify.
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 }
+function fontsHref(heading, body) {
+  const families = [heading, body].filter(Boolean)
+    .map((f) => "family=" + encodeURIComponent(f.trim()).replace(/%20/g, "+") + ":wght@400;600;700").join("&");
+  return families ? `https://fonts.googleapis.com/css2?${families}&display=swap` : null;
+}
 function renderPreview() {
-  const pv = $("#shop-preview");
   if (!state.product) return;
   const b = state.brand;
-  const bg = b?.palette?.background || "#ffffff";
-  const accent = b?.palette?.accent || "#111111";
-  const text = b?.palette?.text || "#1a1a1a";
-  const secondary = b?.palette?.secondary || "#f0f0f0";
-  const headingFont = b?.typography?.heading || "Georgia";
-  const bodyFont = b?.typography?.body || "system-ui";
-  if (b) loadFonts(b.typography?.heading, b.typography?.body);
+  const bg = escapeHtml(b?.palette?.background || "#ffffff");
+  const accent = escapeHtml(b?.palette?.accent || "#111111");
+  const text = escapeHtml(b?.palette?.text || "#1a1a1a");
+  const secondary = escapeHtml(b?.palette?.secondary || "#f0f0f0");
+  const headingFont = escapeHtml(b?.typography?.heading || "Georgia");
+  const bodyFont = escapeHtml(b?.typography?.body || "system-ui");
+  const fonts = b ? fontsHref(b.typography?.heading, b.typography?.body) : null;
 
   const title = state.content?.product?.title || state.product.title || "";
   const price = state.product.price ? `${state.product.price} €` : "";
   const compare = state.product.compareAtPrice ? `<s style="opacity:.5">${escapeHtml(state.product.compareAtPrice)} €</s> ` : "";
   const img = (state.product.images || [])[0];
-  // Le HTML de la fiche vient de NOTRE génération (ou de l'édition manuelle de
-  // l'utilisateur sur sa machine) — il est volontairement rendu tel quel pour
-  // que l'aperçu soit fidèle à ce que Shopify affichera.
   const descHtml = state.content?.product?.description_html || "";
 
-  pv.innerHTML = `
-    <div style="background:${bg}; color:${text}; min-height:100%; font-family:'${bodyFont}', sans-serif;">
-      <div style="padding:14px 22px; background:${secondary}; display:flex; justify-content:space-between; align-items:center;">
-        <b style="font-family:'${headingFont}', serif; font-size:17px;">${escapeHtml(b?.brand_name || "Ta marque")}</b>
-        <span style="font-size:12px; opacity:.7">${escapeHtml(b?.tagline || "")}</span>
-      </div>
-      <div style="padding:26px 30px; max-width:560px; margin:0 auto;">
-        ${img ? `<img src="${escapeHtml(img)}" alt="" style="width:100%; border-radius:8px; margin-bottom:18px;">` : ""}
-        <h1 style="font-family:'${headingFont}', serif; font-size:26px; line-height:1.2; margin:0 0 8px;">${escapeHtml(title)}</h1>
-        <p style="font-size:20px; margin:6px 0 14px;">${compare}<b>${escapeHtml(price)}</b></p>
-        <button style="background:${accent}; color:${bg}; border:0; border-radius:8px; padding:13px 26px; font-size:15px; font-weight:700; width:100%; cursor:pointer;">Ajouter au panier</button>
-        <div style="margin-top:26px; font-size:15px;">${descHtml}</div>
-      </div>
-    </div>`;
+  const doc = `<!doctype html><html><head><meta charset="utf-8">
+    ${fonts ? `<link rel="stylesheet" href="${escapeHtml(fonts)}">` : ""}
+    <style>
+      body { margin:0; background:${bg}; color:${text}; font-family:'${bodyFont}', sans-serif; }
+      .topbar { padding:14px 22px; background:${secondary}; display:flex; justify-content:space-between; align-items:center; }
+      .brand { font-family:'${headingFont}', serif; font-size:17px; font-weight:700; }
+      .tagline { font-size:12px; opacity:.7; }
+      .wrap { padding:26px 30px; max-width:560px; margin:0 auto; }
+      .wrap img.hero { width:100%; border-radius:8px; margin-bottom:18px; }
+      h1 { font-family:'${headingFont}', serif; font-size:26px; line-height:1.2; margin:0 0 8px; }
+      .price { font-size:20px; margin:6px 0 14px; }
+      .cta { background:${accent}; color:${bg}; border:0; border-radius:8px; padding:13px 26px; font-size:15px; font-weight:700; width:100%; }
+      .desc { margin-top:26px; font-size:15px; }
+    </style></head><body>
+    <div class="topbar"><span class="brand">${escapeHtml(b?.brand_name || "Ta marque")}</span><span class="tagline">${escapeHtml(b?.tagline || "")}</span></div>
+    <div class="wrap">
+      ${img ? `<img class="hero" src="${escapeHtml(img)}" alt="">` : ""}
+      <h1>${escapeHtml(title)}</h1>
+      <p class="price">${compare}<b>${escapeHtml(price)}</b></p>
+      <button class="cta">Ajouter au panier</button>
+      <div class="desc">${descHtml}</div>
+    </div></body></html>`;
+
+  $("#pv-empty").style.display = "none";
+  const frame = $("#pv-frame");
+  frame.style.display = "block";
+  frame.srcdoc = doc;
 }
 
 // ---------- init ----------

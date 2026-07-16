@@ -24,12 +24,19 @@ export function getConfig({ requireShopify = true } = {}) {
   const cfg = {
     storeDomain: process.env.SHOPIFY_STORE_DOMAIN,
     adminToken: process.env.SHOPIFY_ADMIN_TOKEN,
+    // Auth Claude, au choix (même mécanisme que n'importe quel agent existant) :
+    // - ANTHROPIC_API_KEY : clé API classique
+    // - ANTHROPIC_AUTH_TOKEN : token OAuth/bearer (ex: sk-ant-oat...)
+    // - ANTHROPIC_BASE_URL : endpoint alternatif (proxy/passerelle locale)
     anthropicKey: process.env.ANTHROPIC_API_KEY,
+    anthropicAuthToken: process.env.ANTHROPIC_AUTH_TOKEN,
+    anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL,
     language: process.env.SHOP_LANGUAGE || "fr",
     currency: process.env.SHOP_CURRENCY || "EUR",
     root: ROOT,
   };
-  if (!cfg.anthropicKey) missing.push("ANTHROPIC_API_KEY");
+  if (!cfg.anthropicKey && !cfg.anthropicAuthToken)
+    missing.push("ANTHROPIC_API_KEY ou ANTHROPIC_AUTH_TOKEN");
   if (requireShopify) {
     if (!cfg.storeDomain) missing.push("SHOPIFY_STORE_DOMAIN");
     if (!cfg.adminToken) missing.push("SHOPIFY_ADMIN_TOKEN");

@@ -10,7 +10,17 @@ const MODEL = "claude-opus-4-8";
 
 let client;
 function getClient(cfg) {
-  if (!client) client = new Anthropic({ apiKey: cfg.anthropicKey });
+  if (!client) {
+    // Le SDK résout lui-même ANTHROPIC_API_KEY / ANTHROPIC_AUTH_TOKEN /
+    // ANTHROPIC_BASE_URL depuis l'environnement (chargé par config.js).
+    // Un token OAuth (bearer) exige en plus le header beta oauth.
+    client = new Anthropic({
+      defaultHeaders:
+        !cfg.anthropicKey && cfg.anthropicAuthToken
+          ? { "anthropic-beta": "oauth-2025-04-20" }
+          : undefined,
+    });
+  }
   return client;
 }
 

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuqia — démo shopgen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+  :root { --bg:#f7f5f0; --sec:#dce4e0; --accent:#2f6b5e; --text:#1f2421; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 "Nunito Sans", sans-serif; }
+  .topbar { padding:16px 26px; background:var(--sec); display:flex; justify-content:space-between; align-items:center; }
+  .brand { font-family:Fraunces, serif; font-size:20px; font-weight:700; }
+  .tagline { font-size:13px; opacity:.75; }
+  nav { padding:10px 26px; display:flex; gap:22px; font-size:14px; border-bottom:1px solid #e6e2d8; background:var(--bg); flex-wrap:wrap; }
+  nav span { opacity:.85; }
+  .wrap { max-width:620px; margin:0 auto; padding:34px 24px 60px; }
+  .imgph { width:100%; aspect-ratio:4/3; border-radius:12px; background:linear-gradient(160deg,#e9e4d8,#d5ddd7); display:flex; align-items:center; justify-content:center; color:#8a948d; font-size:14px; margin-bottom:22px; }
+  h1 { font-family:Fraunces, serif; font-size:30px; line-height:1.15; margin:0 0 10px; }
+  .price { font-size:22px; margin:8px 0 4px; }
+  .price s { opacity:.45; font-size:17px; margin-right:8px; }
+  .save { display:inline-block; background:var(--sec); color:var(--accent); font-weight:700; font-size:13px; border-radius:20px; padding:2px 12px; margin-bottom:14px; }
+  .cta { display:block; width:100%; background:var(--accent); color:var(--bg); border:0; border-radius:10px; padding:15px; font-size:16px; font-weight:700; font-family:inherit; cursor:pointer; }
+  .reassure { display:flex; gap:16px; justify-content:space-between; font-size:12.5px; opacity:.8; margin:14px 0 30px; flex-wrap:wrap; }
+  .desc h2 { font-family:Fraunces, serif; font-size:22px; margin-top:34px; }
+  .desc h3 { font-family:Fraunces, serif; font-size:18px; margin-top:28px; }
+  .desc h4 { font-size:15.5px; margin:18px 0 4px; }
+  .desc li { margin-bottom:8px; }
+  .meta { margin-top:56px; border-top:2px solid var(--sec); padding-top:26px; }
+  .meta h2 { font-family:Fraunces, serif; font-size:19px; }
+  .sw { display:inline-block; width:26px; height:26px; border-radius:6px; vertical-align:-7px; margin-right:6px; border:1px solid rgba(0,0,0,.12); }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 22px; font-size:14px; }
+  details { border:1px solid #e2ded2; border-radius:8px; margin:8px 0; background:#fbfaf6; }
+  summary { padding:9px 14px; cursor:pointer; font-weight:600; font-size:14.5px; }
+  details .in { padding:2px 16px 14px; font-size:14.5px; }
+  .note { background:var(--sec); border-radius:10px; padding:14px 18px; font-size:13.5px; margin-top:40px; }
+</style>
+</head>
+<body>
+  <div class="topbar"><span class="brand">Nuqia</span><span class="tagline">Des nuits qui réparent</span></div>
+  <nav><span>Accueil</span><span>Le coussin</span><span>Mieux dormir</span><span>Notre histoire</span><span>FAQ</span></nav>
+
+  <div class="wrap">
+    <div class="imgph">— tes photos produit ici (guide de style : lumière du matin, tons lin) —</div>
+    <h1>Coussin cervical Nuqia — réveille-toi sans douleur</h1>
+    <p class="price"><s>49,90 €</s><b>34,90 €</b></p>
+    <span class="save">−30 % offre de lancement</span>
+    <button class="cta">Je retrouve mes matins</button>
+    <div class="reassure"><span>✓ Essai 30 nuits</span><span>✓ Retour gratuit</span><span>✓ Paiement sécurisé</span></div>
+
+    <div class="desc">
+      <h2>Ta nuque travaille toute la nuit. Donne-lui enfin le bon appui.</h2>
+      <p>Si tu te réveilles la nuque raide deux ou trois matins par semaine, ton oreiller n'amortit pas le problème : il le crée. Le coussin Nuqia maintient ta colonne alignée pendant que tu dors — c'est tout, et ça change tout.</p>
+      <h3>Ce que ça change, concrètement</h3>
+      <ul>
+        <li><strong>Des matins sans raideur</strong> — la mousse haute densité épouse le creux de ta nuque et garde ta colonne droite, sur le dos comme sur le côté.</li>
+        <li><strong>Un soutien qui ne s'affaisse pas</strong> — la mémoire de forme haute densité reprend sa forme chaque nuit, là où un oreiller classique se tasse en quelques mois.</li>
+        <li><strong>Tu dors au frais</strong> — housse en tissu respirant, déhoussable et lavable en machine : hygiène simple, chaleur évacuée.</li>
+        <li><strong>Adapté à ta position</strong> — son profil 50 × 30 × 10 cm est étudié pour les dormeurs sur le dos et sur le côté.</li>
+      </ul>
+      <h3>Comment bien démarrer</h3>
+      <ol>
+        <li>Place le côté galbé sous ta nuque, le creux épouse tes cervicales.</li>
+        <li>Laisse à ton corps 3 à 5 nuits d'adaptation — c'est normal, il désapprend des années de mauvaise position.</li>
+        <li>Lave la housse à 30° une fois par mois, la mousse reste intacte.</li>
+      </ol>
+      <h3>Questions que tu te poses sûrement</h3>
+      <h4>La mousse à mémoire de forme, ce n'est pas trop dur ?</h4>
+      <p>Non : la densité élevée ne veut pas dire fermeté élevée. La mousse cède sous la chaleur de ton corps et se fige dans la position qui te soutient. Sensation d'accueil moelleux, maintien ferme dessous.</p>
+      <h4>Je dors sur le côté, ça marche pour moi ?</h4>
+      <p>Oui. Le profil de 10 cm comble l'espace entre l'épaule et la tête, exactement ce qu'il faut pour garder la colonne droite sur le côté. Seuls les dormeurs exclusivement sur le ventre ne sont pas concernés.</p>
+      <h4>Et si je ne sens pas de différence ?</h4>
+      <p>Tu as [30 jours] pour tester chez toi. Si tes matins ne changent pas, tu le renvoies et tu es remboursé — sans formulaire à rallonge ni question piège.</p>
+      <h4>Pourquoi 34,90 € quand un oreiller en fait 15 ?</h4>
+      <p>Parce qu'un oreiller à 15 € se tasse et se remplace chaque année. La mousse haute densité de Nuqia garde son maintien plusieurs années — et tes cervicales, elles, n'ont pas de prix de remplacement.</p>
+      <h3>Garantie matins meilleurs</h3>
+      <p>Essaie-le [30 nuits]. Pas convaincu ? Retour simple et remboursement intégral. Tu ne risques rien d'autre que de mieux dormir.</p>
+      <button class="cta">Je retrouve mes matins — 34,90 €</button>
+    </div>
+
+    <div class="meta">
+      <h2>Ce que shopgen a aussi généré</h2>
+      <div class="grid">
+        <div><b>Brand kit</b><br>
+          <span class="sw" style="background:#f7f5f0"></span>fond<br>
+          <span class="sw" style="background:#dce4e0"></span>secondaire<br>
+          <span class="sw" style="background:#2f6b5e"></span>accent (CTA)<br>
+          Typo : Fraunces / Nunito Sans
+        </div>
+        <div><b>Persona</b><br>35-55 ans, travail sur écran, douleurs cervicales récurrentes, sceptique envers les gadgets. Niveau : conscient de la solution.</div>
+      </div>
+      <h2 style="margin-top:26px">8 pages prêtes</h2>
+      <details><summary>À propos de Nuqia</summary><div class="in">Histoire de marque orientée conversion : le ras-le-bol fondateur, le déclic « alignement », 3 engagements, signature.</div></details>
+      <details><summary>Livraison &amp; retours</summary><div class="in">Délais, frais, procédure de retour en 3 étapes — les valeurs entre [crochets] sont à personnaliser.</div></details>
+      <details><summary>FAQ générale</summary><div class="in">5 objections levées : délais, paiement sécurisé, garantie, entretien, durabilité.</div></details>
+      <details><summary>CGV · Confidentialité · Mentions légales · Remboursement · Contact</summary><div class="in">Squelettes juridiques complets, champs légaux à remplir signalés entre [crochets].</div></details>
+      <h2 style="margin-top:26px">Collections &amp; navigation</h2>
+      <p style="font-size:14.5px">Collections « Mieux dormir » (tag sommeil) et « Confort au quotidien » (tag confort) — rattachement automatique par tags. Menu principal 5 entrées, footer légal 6 entrées.</p>
+      <div class="note"><b>Démo générée par le moteur de shopgen</b> (même modèle, mêmes playbooks CRO/copy/persona). Fichier source : <code>exemples/demo-generation.json</code>. Dans l'interface, chaque élément de cette page est éditable en direct avant push vers Shopify.</div>
+    </div>
+  </div>
+</body>
+</html>

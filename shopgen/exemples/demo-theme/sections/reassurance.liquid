@@ -1,0 +1,22 @@
+<section class="reassurance">
+  <div class="wrap reassurance-inner">
+    {%- for block in section.blocks -%}
+      <div class="reassure-item" {{ block.shopify_attributes }}>
+        <strong>{{ block.settings.title }}</strong>
+        <span>{{ block.settings.text }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+{% schema %}
+{
+  "name": "Réassurance",
+  "blocks": [
+    { "type": "item", "name": "Argument", "settings": [
+      { "type": "text", "id": "title", "label": "Titre", "default": "Livraison rapide" },
+      { "type": "text", "id": "text", "label": "Texte", "default": "Expédié sous 24-48h" }
+    ]}
+  ],
+  "presets": [{ "name": "Réassurance", "blocks": [{"type":"item"},{"type":"item"},{"type":"item"}] }]
+}
+{% endschema %}
+</section>

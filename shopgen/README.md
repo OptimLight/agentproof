@@ -31,7 +31,8 @@ cp .env.example .env   # puis remplis les valeurs (voir ci-dessous)
 npm run ui   # puis ouvre http://127.0.0.1:3333
 ```
 
-Workflow en 4 étapes dans le navigateur : produit → brand kit → contenu → push.
+Workflow en 5 étapes dans le navigateur : produit → brand kit → contenu →
+**thème Liquid** → push.
 **Tout est modifiable en direct** (textes, palette au color-picker, typos, HTML
 des pages) et l'aperçu boutique à droite se met à jour à chaque frappe. Les
 champs « commentaire de régénération » permettent de relancer l'IA avec une
@@ -75,8 +76,27 @@ Chaque génération est sauvegardée dans `shopgen-output/` (audit + réutilisat
 - Aucun faux avis, faux compteur ni fausse rareté n'est généré (voir `knowledge/cro.md`) — c'est volontaire et non négociable légalement.
 - `.env` est ignoré par git ; ne le commite jamais.
 
+## Le thème Liquid
+
+shopgen génère un **vrai thème Shopify** (pas juste du contenu) : `layout/`,
+`sections/*.liquid`, `templates/*.json`, `assets/theme.css`, `config/settings_*`,
+`locales/`. La palette et les polices du brand kit sont écrites dans
+`config/settings_data.json`, donc le thème s'affiche directement aux bonnes
+couleurs — modifiables ensuite dans l'éditeur de thème Shopify.
+
+Le contenu (fiche produit, pages) reste **dynamique** côté Shopify : le thème le
+met en forme via `{{ product.description }}`, `{{ page.content }}`, `{{ product.price | money }}`
+(devise de la boutique, automatique). Séparation propre thème / contenu.
+
+Import : **Boutique en ligne → Thèmes → Ajouter → Importer** le `.zip` généré
+(bouton de téléchargement dans l'interface, ou fichier dans `shopgen-output/`).
+Un thème d'exemple complet est fourni dans `exemples/demo-theme/`.
+
+Sans photos produit, le thème affiche un emplacement image intentionnel plutôt
+qu'un vide — tu ajoutes tes visuels dans l'admin.
+
 ## Limites connues (V1)
 
-- Les images poussées sont celles du produit source ; la génération d'images IA cohérentes au brand kit est prévue en phase 2.
-- Les couleurs/typos du thème s'appliquent à la main (l'API Shopify restreint l'écriture des réglages de thème) — le rapport final te donne les valeurs exactes.
+- Génération d'images IA cohérentes au brand kit : prévue en phase 2 (le thème
+  gère proprement l'absence d'images en attendant).
 - L'import AliExpress/Amazon direct n'est pas implémenté (anti-bots) : utilise `--file`.

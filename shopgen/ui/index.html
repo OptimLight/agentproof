@@ -153,13 +153,24 @@
       <div class="error" id="err-content"></div>
     </section>
 
+    <section class="step locked" id="step-theme">
+      <h2>4 · Thème Shopify Liquid</h2>
+      <p class="hint">Génère un vrai thème <b>.liquid</b> (sections, templates, CSS) qui applique ta palette et tes polices. À importer dans Shopify → Boutique en ligne → Thèmes → Ajouter → Importer.</p>
+      <div class="actions">
+        <button id="btn-theme">Générer le thème Liquid</button>
+        <a id="btn-theme-dl" class="ghost" href="/api/theme/download" style="display:none; text-decoration:none;">⬇ Télécharger le .zip</a>
+      </div>
+      <div id="theme-log"></div>
+      <div class="error" id="err-theme"></div>
+    </section>
+
     <section class="step locked" id="step-push">
-      <h2>4 · Push vers Shopify</h2>
+      <h2>5 · Push du contenu vers Shopify</h2>
       <div class="actions">
         <button id="btn-push">Pousser vers Shopify</button>
         <button class="ghost" id="btn-save">Sauvegarder en local</button>
       </div>
-      <p class="hint">Le produit est créé en <b>brouillon</b> : rien n'est publié sans toi.</p>
+      <p class="hint">Crée produit, pages, collections et menus. Le produit est en <b>brouillon</b> : rien n'est publié sans toi.</p>
       <div id="push-log"></div>
       <div class="error" id="err-push"></div>
     </section>
@@ -292,6 +303,7 @@ $("#btn-content").addEventListener("click", async () => {
     });
     showContent();
     btn.dataset.label = "Régénérer le contenu"; // restauré par busy(false)
+    unlock("#step-theme");
     unlock("#step-push");
   } catch (e) { $("#err-content").textContent = e.message; }
   finally { busy(btn, false); }
@@ -339,7 +351,24 @@ function showContent() {
   renderPreview();
 }
 
-// ---------- étape 4 : push ----------
+// ---------- étape 4 : thème Liquid ----------
+$("#btn-theme").addEventListener("click", async () => {
+  const btn = $("#btn-theme"); $("#err-theme").textContent = "";
+  try {
+    busy(btn, true);
+    const res = await api("/api/theme", { brandKit: state.brand, content: state.content });
+    $("#theme-log").textContent =
+      `✓ Thème généré : ${res.fileCount} fichiers .liquid → ${res.dir}\n` +
+      `Import : Shopify → Boutique en ligne → Thèmes → Ajouter → Importer`;
+    const dl = $("#btn-theme-dl");
+    if (res.downloadable) { dl.style.display = "inline-block"; }
+    else { $("#theme-log").textContent += `\n(commande « zip » absente sur ta machine — importe le dossier ci-dessus)`; }
+    btn.dataset.label = "Régénérer le thème";
+  } catch (e) { $("#err-theme").textContent = e.message; }
+  finally { busy(btn, false); }
+});
+
+// ---------- étape 5 : push ----------
 $("#btn-push").addEventListener("click", async () => {
   const btn = $("#btn-push"); $("#err-push").textContent = "";
   let pushed = false;

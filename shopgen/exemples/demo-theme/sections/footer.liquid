@@ -1,0 +1,22 @@
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <span class="brand">{{ settings.brand_name | default: shop.name }}</span>
+      <p class="tagline">{{ settings.tagline }}</p>
+    </div>
+    <nav class="footer-nav">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+  </div>
+  <div class="wrap footer-legal">© {{ 'now' | date: '%Y' }} {{ settings.brand_name | default: shop.name }}</div>
+{% schema %}
+{
+  "name": "Pied de page",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu du pied de page", "default": "footer" }
+  ]
+}
+{% endschema %}
+</footer>

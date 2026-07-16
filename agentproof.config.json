@@ -10,6 +10,7 @@
     "examples",
     "docs/launch-kit",
     "homepage",
+    "shopgen/shopgen-output",
     "AGENT_PROOF_REPORT.md",
     "agentproof-report.md",
     "agentproof-report.html",

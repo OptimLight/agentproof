@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "hero": { "type": "hero" },
+    "reassurance": {
+      "type": "reassurance",
+      "blocks": {
+        "b1": { "type": "item", "settings": { "title": "Essai satisfait ou remboursé", "text": "30 jours pour changer d'avis" } },
+        "b2": { "type": "item", "settings": { "title": "Livraison suivie", "text": "Expédié sous 24-48h" } },
+        "b3": { "type": "item", "settings": { "title": "Paiement sécurisé", "text": "CB, Apple Pay, Google Pay" } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    }
+  },
+  "order": ["hero", "reassurance"]
+}

@@ -13,11 +13,15 @@ import {
   createCollection,
   createMenu,
 } from "./shopify.js";
+import { generateTheme } from "./liquid.js";
+import { zipTheme } from "./theme-zip.js";
 
 const cfg = getConfig({ requireShopify: false });
 const PORT = Number(process.env.PORT || 3333);
 const UI_PATH = path.join(cfg.root, "ui", "index.html");
+const OUT_DIR = path.join(cfg.root, "shopgen-output");
 const MAX_BODY_BYTES = 5_000_000;
+let lastThemeZip = null; // dernier zip généré, servi par /api/theme/download
 
 function shopifyReady() {
   return Boolean(cfg.storeDomain && cfg.adminToken);
@@ -143,6 +147,27 @@ const routes = {
     }
     return { log, admin: `https://${cfg.storeDomain}/admin` };
   },
+  "POST /api/theme": async (body) => {
+    const { brandKit, content } = body;
+    if (!brandKit?.brand_name || !content?.product)
+      throw badRequest("Brand kit ou contenu manquant pour générer le thème");
+    const slug =
+      brandKit.brand_name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "") || "shop";
+    const themeDir = path.join(OUT_DIR, `${slug}-theme`);
+    fs.rmSync(themeDir, { recursive: true, force: true });
+    const { files } = generateTheme(brandKit, content, themeDir);
+    lastThemeZip = zipTheme(themeDir);
+    return {
+      fileCount: files.length,
+      dir: themeDir,
+      downloadable: Boolean(lastThemeZip),
+    };
+  },
   "POST /api/save": async (body) => {
     if (!body.brandKit) throw badRequest("Rien à sauvegarder");
     const file = saveRun(body.brandKit, body);
@@ -181,6 +206,17 @@ const server = http.createServer(async (req, res) => {
 
     if (key === "GET /" || key === "GET /index.html") {
       return send(res, 200, fs.readFileSync(UI_PATH, "utf8"), "text/html");
+    }
+
+    if (key === "GET /api/theme/download") {
+      if (!lastThemeZip || !fs.existsSync(lastThemeZip)) {
+        return send(res, 404, { error: "Aucun thème généré à télécharger" });
+      }
+      res.writeHead(200, {
+        "Content-Type": "application/zip",
+        "Content-Disposition": `attachment; filename="${path.basename(lastThemeZip)}"`,
+      });
+      return fs.createReadStream(lastThemeZip).pipe(res);
     }
 
     const handler = routes[key];

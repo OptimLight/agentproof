@@ -11,6 +11,8 @@ import {
   createMenu,
 } from "./shopify.js";
 import { printBrandKit, printContentSummary, checkpoint } from "./review.js";
+import { generateTheme } from "./liquid.js";
+import { zipTheme } from "./theme-zip.js";
 
 const USAGE = `shopgen — génère une boutique Shopify complète à partir d'un produit.
 
@@ -18,8 +20,9 @@ Usage :
   node src/index.js <url-produit-shopify>     Depuis un produit Shopify public
   node src/index.js --file <produit.json>     Depuis une fiche produit locale
 Options :
-  --dry-run    Génère tout mais ne pousse rien vers Shopify (sortie JSON locale)
+  --dry-run    Génère tout (contenu + thème Liquid) mais ne pousse rien vers Shopify
   --yes        Saute les points de validation (utilise la première proposition)
+  --no-theme   Ne génère pas le thème Liquid (contenu seulement)
 `;
 
 async function main() {
@@ -30,6 +33,7 @@ async function main() {
   }
   const dryRun = args.includes("--dry-run");
   const autoYes = args.includes("--yes");
+  const withTheme = !args.includes("--no-theme");
   const cfg = getConfig({ requireShopify: !dryRun });
 
   // 1. Ingestion
@@ -98,8 +102,31 @@ async function main() {
   }
   console.log(`\nGénération sauvegardée : ${outFile}`);
 
+  // 4. Thème Liquid (dossier importable dans Shopify)
+  let themeZip = null;
+  if (withTheme) {
+    console.log(`\nGénération du thème Shopify Liquid…`);
+    const themeDir = path.join(
+      outDir,
+      `${slugify(brandKit.brand_name)}-theme`,
+    );
+    fs.rmSync(themeDir, { recursive: true, force: true });
+    const { files } = generateTheme(brandKit, content, themeDir);
+    themeZip = zipTheme(themeDir);
+    console.log(`  ✓ Thème généré : ${files.length} fichiers → ${themeDir}`);
+    console.log(
+      themeZip
+        ? `  ✓ Archive prête : ${themeZip}`
+        : `  (commande « zip » absente — importe le dossier tel quel)`,
+    );
+  }
+
   if (dryRun) {
     console.log(`--dry-run : rien n'a été poussé vers Shopify.`);
+    if (themeZip)
+      console.log(
+        `Importe le thème : Shopify → Boutique en ligne → Thèmes → Ajouter → Importer → ${path.basename(themeZip)}`,
+      );
     return;
   }
 
@@ -147,11 +174,10 @@ async function main() {
   console.log(`
 ━━━ TERMINÉ ━━━
 Prochaines étapes manuelles (5 minutes) :
-  1. ${admin}/products — vérifier la fiche, passer le produit en « Actif »
-  2. ${admin}/menus — assigner les menus « ${brandKit.brand_name} » au thème
-  3. Réglages du thème → couleurs/typos du brand kit :
-     fond ${brandKit.palette.background} · accent ${brandKit.palette.accent} · titres ${brandKit.typography.heading} · corps ${brandKit.typography.body}
-  4. Relire les textes entre [crochets] (délais de livraison, coordonnées…)
+  1. ${admin}/themes — Ajouter → Importer ${themeZip ? path.basename(themeZip) : "le dossier du thème"}, puis Personnaliser → assigner les menus « ${brandKit.brand_name} »
+  2. ${admin}/products — vérifier la fiche, passer le produit en « Actif »
+  3. Relire les textes entre [crochets] (délais de livraison, coordonnées…)
+${themeZip ? `\nLe thème applique déjà ta palette (${brandKit.palette.accent}) et tes polices (${brandKit.typography.heading}/${brandKit.typography.body}).` : ""}
 `);
 }
 

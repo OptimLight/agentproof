@@ -1,7 +1,3 @@
-<!doctype html><html lang=fr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
-<title>Nuqia — aperçu thème Liquid</title>
-<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Nunito+Sans:wght@400;600;700&display=swap">
-<style>:root{--bg:#f7f5f0;--secondary:#dce4e0;--accent:#2f6b5e;--text:#1f2421;--font-heading:'Fraunces',Georgia,serif;--font-body:'Nunito Sans',system-ui,sans-serif}
 /* Thème généré par shopgen — couleurs et polices pilotées par les réglages */
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; font-size: 16px; }
@@ -77,17 +73,3 @@ h1, h2, h3, h4 { font-family: var(--font-heading); line-height: 1.2; }
 @media (max-width: 760px) {
   .product-grid { grid-template-columns: 1fr; gap: 24px; }
 }
-
-.banner{background:var(--accent);color:var(--bg);text-align:center;padding:8px;font:600 13px var(--font-body)}</style></head><body class=template-product>
-<div class=banner>Aperçu fidèle du thème Liquid généré (assets/theme.css réel) — rendu du template product.json</div>
-<header class=site-header><div class="wrap header-inner"><a class=brand>Nuqia</a><nav class=site-nav><a>Accueil</a><a>Le coussin</a><a>Mieux dormir</a><a>Notre histoire</a><a>FAQ</a></nav><a class=cart-link>Panier (0)</a></div></header>
-<main><section class=product-page><div class="wrap product-grid">
-<div class=product-media><div class=image-slot>Ajoute tes photos produit ici</div></div>
-<div class=product-info><h1 class=product-title>Coussin cervical Nuqia — réveille-toi sans douleur</h1>
-<p class=product-price><s>49,90 €</s><strong>34,90 €</strong></p>
-<button class=cta>Ajouter au panier</button>
-<div class=reassure-inline><span>Essai satisfait ou remboursé</span><span>Paiement sécurisé</span><span>Retour simple</span></div>
-<div class="rte product-description"><h2>Ta nuque travaille toute la nuit. Donne-lui enfin le bon appui.</h2><p>Si tu te réveilles la nuque raide deux ou trois matins par semaine, ton oreiller n'amortit pas le problème : il le crée. Le coussin Nuqia maintient ta colonne alignée pendant que tu dors — c'est tout, et ça change tout.</p><h3>Ce que ça change, concrètement</h3><ul><li><strong>Des matins sans raideur</strong> — la mousse haute densité épouse le creux de ta nuque et garde ta colonne droite, sur le dos comme sur le côté.</li><li><strong>Un soutien qui ne s'affaisse pas</strong> — la mémoire de forme haute densité reprend sa forme chaque nuit, là où un oreiller classique se tasse en quelques mois.</li><li><strong>Tu dors au frais</strong> — housse en tissu respirant, déhoussable et lavable en machine : hygiène simple, chaleur évacuée.</li><li><strong>Adapté à ta position</strong> — son profil 50 × 30 × 10 cm est étudié pour les dormeurs sur le dos et sur le côté.</li></ul><h3>Comment bien démarrer</h3><ol><li>Place le côté galbé sous ta nuque, le creux épouse tes cervicales.</li><li>Laisse à ton corps 3 à 5 nuits d'adaptation — c'est normal, il désapprend des années de mauvaise position.</li><li>Lave la housse à 30° une fois par mois, la mousse reste intacte.</li></ol><h3>Questions que tu te poses sûrement</h3><h4>La mousse à mémoire de forme, ce n'est pas trop dur ?</h4><p>Non : la densité élevée ne veut pas dire fermeté élevée. La mousse cède sous la chaleur de ton corps et se fige dans la position qui te soutient. Sensation d'accueil moelleux, maintien ferme dessous.</p><h4>Je dors sur le côté, ça marche pour moi ?</h4><p>Oui. Le profil de 10 cm comble l'espace entre l'épaule et la tête, exactement ce qu'il faut pour garder la colonne droite sur le côté. Seuls les dormeurs exclusivement sur le ventre ne sont pas concernés.</p><h4>Et si je ne sens pas de différence ?</h4><p>Tu as [30 jours] pour tester chez toi. Si tes matins ne changent pas, tu le renvoies et tu es remboursé — sans formulaire à rallonge ni question piège.</p><h4>Pourquoi 34,90 € quand un oreiller en fait 15 ?</h4><p>Parce qu'un oreiller à 15 € se tasse et se remplace chaque année. La mousse haute densité de Nuqia garde son maintien plusieurs années — et tes cervicales, elles, n'ont pas de prix de remplacement.</p><h3>Garantie matins meilleurs</h3><p>Essaie-le [30 nuits]. Pas convaincu ? Retour simple et remboursement intégral. Tu ne risques rien d'autre que de mieux dormir.</p></div></div>
-</div></section></main>
-<footer class=site-footer><div class="wrap footer-inner"><div class=footer-brand><span class=brand>Nuqia</span><p class=tagline>Des nuits qui réparent</p></div><nav class=footer-nav><a>Livraison & retours</a><a>Remboursement</a><a>CGV</a><a>Confidentialité</a><a>Mentions légales</a><a>Contact</a></nav></div><div class="wrap footer-legal">© 2026 Nuqia</div></footer>
-</body></html>

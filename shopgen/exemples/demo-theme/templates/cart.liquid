@@ -1,0 +1,18 @@
+<section class="page"><div class="wrap page-narrow">
+  <h1 class="page-title">Panier</h1>
+  {%- if cart.item_count > 0 -%}
+    {%- form 'cart', cart -%}
+      {%- for item in cart.items -%}
+        <div class="cart-line">
+          <span>{{ item.product.title }} × {{ item.quantity }}</span>
+          <span>{{ item.final_line_price | money }}</span>
+        </div>
+      {%- endfor -%}
+      <p class="cart-total">Total : {{ cart.total_price | money }}</p>
+      <button type="submit" name="checkout" class="cta">Passer la commande</button>
+    {%- endform -%}
+  {%- else -%}
+    <p>Ton panier est vide.</p>
+    <a href="{{ routes.all_products_collection_url }}" class="cta">Voir les produits</a>
+  {%- endif -%}
+</div></section>

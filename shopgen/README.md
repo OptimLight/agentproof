@@ -25,6 +25,21 @@ cp .env.example .env   # puis remplis les valeurs (voir ci-dessous)
 
 ## Utilisation
 
+### Interface web (recommandé)
+
+```bash
+npm run ui   # puis ouvre http://127.0.0.1:3333
+```
+
+Workflow en 4 étapes dans le navigateur : produit → brand kit → contenu → push.
+**Tout est modifiable en direct** (textes, palette au color-picker, typos, HTML
+des pages) et l'aperçu boutique à droite se met à jour à chaque frappe. Les
+champs « commentaire de régénération » permettent de relancer l'IA avec une
+consigne (« plus haut de gamme », « FAQ plus rassurante »…). Sans configuration
+Shopify, l'interface fonctionne en mode génération seule.
+
+### Ligne de commande
+
 ```bash
 # Depuis un produit Shopify public (n'importe quelle boutique)
 node src/index.js https://une-boutique.com/products/mon-produit
